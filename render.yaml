@@ -1,0 +1,39 @@
+# Render Blueprint for Trailbit: one web service that serves the frontend AND the /api (FastAPI).
+#
+# Deploy:
+#   1. Push this repo to GitHub (it already is).
+#   2. In Render: New > Blueprint > pick this repository. Render reads this file.
+#   3. When it asks for GITHUB_TOKEN, paste a token (no scopes needed). It is stored in Render, never in the repo.
+#   4. Apply. The first build takes a few minutes. The service URL appears at the top of the service page.
+#
+# Verified before committing: a clean `pip install -r requirements.txt` on Python 3.12, then the start command below with
+# RENDER=true and PORT set, against a checkout with no .env and no database: /health, the frontend, images and /api all answered.
+
+services:
+  - type: web
+    name: trailbit
+    runtime: python
+    # Free plan: no cost, but the service sleeps after about 15 minutes idle (the next visit waits ~1 minute to wake it)
+    # and it has no persistent disk. Bookmarks live in SQLite, so they are LOST on every redeploy or restart.
+    # To keep them, see "Keep bookmarks" at the bottom: it needs a paid plan, so it is off by default.
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      # Optional but recommended. Without it GitHub allows 10 searches a minute and 60 other requests an hour, shared by
+      # every visitor; with a token that is 30 a minute and 5,000 an hour. Render asks for the value; it is not stored here.
+      - key: GITHUB_TOKEN
+        sync: false
+      # Keep bookmarks (1 of 2): uncomment these two lines together with the disk block below.
+      # - key: DATA_DIR
+      #   value: /var/data
+      # Python: left to Render's default. The pinned requirements are tested on 3.12 and 3.14 (3.11+ is required).
+      # To pin one, add:  - key: PYTHON_VERSION   value: "3.12.x"   (Render needs a full x.y.z it supports)
+
+    # Keep bookmarks (2 of 2): change `plan: free` above to `plan: starter` and uncomment this block.
+    # The app then stores trailbit.db on the disk, and bookmarks survive deploys. DATA_DIR above must match mountPath.
+    # disk:
+    #   name: trailbit-data
+    #   mountPath: /var/data
+    #   sizeGB: 1
