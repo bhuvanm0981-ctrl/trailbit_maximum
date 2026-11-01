@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Trailbit - Find your first open-source contribution</title>
   <meta name="description" content="Find a live, beginner-friendly open-source issue on GitHub, check that it is healthy, understand what it needs, and follow a checklist to your first pull request." />
-  <meta name="theme-color" content="#0e1626" />
+  <meta name="theme-color" content="#dbe8d8" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -16,11 +16,11 @@
     tailwind.config = {
       theme: {
         extend: {
-          // Navy + cream palette. Overriding slate/white here recolours every text-slate-* / bg-slate-* / text-white class at once.
+          // Semantic colours read CSS variables from style.css, so a different palette (or the dark footer) re-points them.
           colors: {
-            white: '#faf6ee',
-            slate: { 50: '#faf6ee', 100: '#f1ece2', 200: '#ece7dc', 300: '#d8d4ca', 400: '#b3bdd1', 500: '#8794b0',
-                     600: '#5f6e90', 700: '#3b486a', 800: '#26334f', 900: '#18233a', 950: '#0e1626' },
+            ink: { DEFAULT: 'var(--ink)', body: 'var(--body)', muted: 'var(--muted)' },
+            line: 'rgb(var(--line-rgb) / <alpha-value>)',
+            teal: { DEFAULT: 'rgb(var(--accent-rgb) / <alpha-value>)', deep: 'var(--accent-deep)' },
           },
           fontFamily: {
             sans: ['"Atkinson Hyperlegible"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
@@ -33,16 +33,16 @@
   </script>
   <link rel="stylesheet" href="style.css" />
 </head>
-<body class="app-bg min-h-screen bg-[#0e1626] font-sans text-slate-300 antialiased">
-  <a href="#layer-stage" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-[#ffc940] focus:px-3 focus:py-2 focus:text-[#0e1626] focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-white">Skip to content</a>
+<body class="app-bg min-h-screen bg-[#dbe8d8] font-sans text-ink-body antialiased">
+  <a href="#layer-stage" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-teal focus:px-3 focus:py-2 focus:text-white focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-[#0b2426]">Skip to content</a>
 
-  <header class="sticky top-0 z-40 border-b border-slate-900 bg-slate-950/80 backdrop-blur-lg">
+  <header class="sticky top-0 z-40 border-b border-line/30 bg-[#dbe8d8]/90 backdrop-blur-lg">
     <div class="mx-auto flex max-w-[92rem] items-center justify-between gap-3 px-4 py-3 sm:px-6">
       <a href="#top" id="home-link" class="flex items-center gap-2.5" aria-label="Trailbit home">
-        <span class="logo-mark inline-flex h-9 w-9 items-center justify-center rounded-xl bg-[#ffc940] text-[#0e1626]" aria-hidden="true">
+        <span class="logo-mark inline-flex h-9 w-9 items-center justify-center rounded-xl bg-teal text-white" aria-hidden="true">
           <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 19l5.5-10 4 6.5L16 10l5 9"/><circle cx="8.5" cy="5.5" r="1.6" fill="currentColor"/></svg>
         </span>
-        <span class="font-display text-2xl font-extrabold tracking-tight text-white">Trailbit</span>
+        <span class="font-display text-2xl font-extrabold tracking-tight text-ink">Trailbit</span>
       </a>
 
       <nav aria-label="About Trailbit" class="hidden items-center gap-1 text-sm md:flex">
@@ -86,33 +86,33 @@
           <div class="grid items-start gap-10 lg:grid-cols-5">
             <div class="lg:col-span-3">
               <p class="eyebrow">Open source, made approachable</p>
-              <h2 id="l1-title" data-layer-title tabindex="-1" class="mt-3 font-display text-4xl font-extrabold tracking-tight text-white sm:text-6xl sm:leading-[1.02]">Find an issue worth your <span class="text-accent">first pull request.</span></h2>
-              <p class="mt-5 max-w-2xl text-lg leading-relaxed text-slate-300">Every issue here is open on GitHub right now and labelled good first issue. Tell us what you know, and we put the closest matches first.</p>
+              <h2 id="l1-title" data-layer-title tabindex="-1" class="mt-3 font-display text-4xl font-extrabold tracking-tight text-ink sm:text-6xl sm:leading-[1.02]">Find an issue worth your <span class="text-accent">first pull request.</span></h2>
+              <p class="mt-5 max-w-2xl text-lg leading-relaxed text-ink-body">Every issue here is open on GitHub right now and labelled good first issue. Tell us what you know, and we put the closest matches first.</p>
               <div class="mt-7 flex flex-wrap items-center gap-3">
                 <button id="hero-cta" type="button" class="btn btn-lg">Choose my skills<svg viewBox="0 0 24 24" class="arrow h-4 w-4" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg></button>
                 <button id="hero-how" type="button" class="btn-ghost btn-lg">How it works</button>
               </div>
-              <p class="mt-5 flex max-w-xl items-start gap-2 text-sm text-slate-400"><svg viewBox="0 0 24 24" class="mt-0.5 h-4 w-4 flex-none text-[#ffc940]" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.5-3.2 7.8-8 9-4.8-1.2-8-4.5-8-9V6l8-3z"/><path d="M9 12l2 2 4-4"/></svg><span>Free to use. Nothing here is a demo: issues are fetched live from GitHub, so what you see is open today.</span></p>
-              <p id="auth-note" class="mt-4 hidden max-w-2xl rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-xs text-amber-200"></p>
+              <p class="mt-5 flex max-w-xl items-start gap-2 text-sm text-ink-muted"><svg viewBox="0 0 24 24" class="mt-0.5 h-4 w-4 flex-none text-teal-deep" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.5-3.2 7.8-8 9-4.8-1.2-8-4.5-8-9V6l8-3z"/><path d="M9 12l2 2 4-4"/></svg><span>Free to use. Nothing here is a demo: issues are fetched live from GitHub, so what you see is open today.</span></p>
+              <p id="auth-note" class="mt-4 hidden max-w-2xl rounded-lg border border-amber-700/40 bg-amber-500/15 px-3 py-2 text-xs text-amber-900"></p>
             </div>
 
             <article class="glass rounded-2xl p-5 sm:p-6 lg:col-span-2" aria-labelledby="what-title">
-              <h3 id="what-title" class="font-display text-xl font-semibold tracking-tight text-white">What is Trailbit?</h3>
-              <p class="mt-3 leading-relaxed text-slate-300">Trailbit helps you make your first contribution to an open-source project. It finds real issues that maintainers have marked as good for newcomers, checks that they are still alive, explains the problem, and walks you through fixing it one step at a time.</p>
+              <h3 id="what-title" class="font-display text-xl font-semibold tracking-tight text-ink">What is Trailbit?</h3>
+              <p class="mt-3 leading-relaxed text-ink-body">Trailbit helps you make your first contribution to an open-source project. It finds real issues that maintainers have marked as good for newcomers, checks that they are still alive, explains the problem, and walks you through fixing it one step at a time.</p>
               <details class="checklist-details mt-5">
                 <summary><span>New to open source? Three words to know</span><span class="chevron" aria-hidden="true"></span></summary>
                 <dl class="mt-3 space-y-3 px-1 text-sm leading-relaxed">
-                  <div><dt class="font-semibold text-slate-200">Issue</dt><dd class="text-slate-400">A bug report or a request on a project's GitHub page.</dd></div>
-                  <div><dt class="font-semibold text-slate-200">Fork</dt><dd class="text-slate-400">Your own copy of a project, where you can make changes safely.</dd></div>
-                  <div><dt class="font-semibold text-slate-200">Pull request</dt><dd class="text-slate-400">How you offer your change back to the maintainers for review.</dd></div>
+                  <div><dt class="font-semibold text-ink">Issue</dt><dd class="text-ink-muted">A bug report or a request on a project's GitHub page.</dd></div>
+                  <div><dt class="font-semibold text-ink">Fork</dt><dd class="text-ink-muted">Your own copy of a project, where you can make changes safely.</dd></div>
+                  <div><dt class="font-semibold text-ink">Pull request</dt><dd class="text-ink-muted">How you offer your change back to the maintainers for review.</dd></div>
                 </dl>
               </details>
             </article>
           </div>
 
           <section id="how" class="mt-16 scroll-mt-24" aria-labelledby="how-title">
-            <h3 id="how-title" class="font-display text-3xl font-semibold tracking-tight text-white">How it works, in four layers</h3>
-            <p class="mt-2 max-w-2xl text-slate-400">You move through them one at a time. Nothing is hidden behind a login, and you can step back whenever you like.</p>
+            <h3 id="how-title" class="font-display text-3xl font-semibold tracking-tight text-ink">How it works, in four layers</h3>
+            <p class="mt-2 max-w-2xl text-ink-muted">You move through them one at a time. Nothing is hidden behind a login, and you can step back whenever you like.</p>
             <ol class="chapter-list mt-6">
               <li><span class="pillar-index" aria-hidden="true">1</span><h4>Tell us what you know</h4><p>Tick your skills below, or skip if you are brand new. We use them only to order the list.</p></li>
               <li><span class="pillar-index" aria-hidden="true">2</span><h4>Pick an issue</h4><p>The closest matches come first, then the list fades toward less related ones.</p></li>
@@ -122,9 +122,9 @@
           </section>
 
           <form id="skills-form" class="glass mt-14 scroll-mt-24 rounded-2xl p-5 sm:p-6" aria-labelledby="skills-title" onsubmit="return false">
-            <h3 id="skills-title" class="font-display text-2xl font-semibold tracking-tight text-white">What do you already know?</h3>
-            <p class="mt-1 text-sm text-slate-400">Tick the skills you are comfortable with. It is fine to pick none, or only a few.</p>
-            <div id="skills-error" class="mt-4 hidden rounded-xl border border-rose-500/40 bg-rose-500/10 p-4 text-sm text-rose-200" role="alert"></div>
+            <h3 id="skills-title" class="font-display text-2xl font-semibold tracking-tight text-ink">What do you already know?</h3>
+            <p class="mt-1 text-sm text-ink-muted">Tick the skills you are comfortable with. It is fine to pick none, or only a few.</p>
+            <div id="skills-error" class="mt-4 hidden rounded-xl border border-rose-700/40 bg-rose-600/10 p-4 text-sm text-rose-900" role="alert"></div>
 
             <fieldset class="mt-5">
               <legend class="field-label">Languages</legend>
@@ -136,8 +136,8 @@
               <div id="skill-topics" class="mt-3 flex flex-wrap gap-2"></div>
             </fieldset>
 
-            <div class="mt-6 flex flex-wrap items-center justify-between gap-4 border-t border-slate-800/60 pt-5">
-              <p id="skill-summary" class="text-sm text-slate-400" aria-live="polite"></p>
+            <div class="mt-6 flex flex-wrap items-center justify-between gap-4 border-t border-line/35 pt-5">
+              <p id="skill-summary" class="text-sm text-ink-muted" aria-live="polite"></p>
               <div class="flex flex-wrap gap-3">
                 <button id="clear-skills" type="button" class="btn-ghost" hidden>Clear</button>
                 <button id="continue-skills" type="button" class="btn btn-lg"><span id="continue-label">Skip: show me the easiest issues</span><svg viewBox="0 0 24 24" class="arrow h-4 w-4" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
@@ -152,8 +152,8 @@
             <div class="flex items-start gap-3">
               <span class="pillar-index" aria-hidden="true">2</span>
               <div>
-                <h2 id="l2-title" data-layer-title tabindex="-1" class="font-display text-2xl font-semibold tracking-tight text-white">Pick an issue</h2>
-                <p id="l2-sub" class="max-w-2xl text-sm text-slate-400"></p>
+                <h2 id="l2-title" data-layer-title tabindex="-1" class="font-display text-2xl font-semibold tracking-tight text-ink">Pick an issue</h2>
+                <p id="l2-sub" class="max-w-2xl text-sm text-ink-muted"></p>
               </div>
             </div>
             <button id="change-skills" type="button" class="btn-ghost"><svg viewBox="0 0 24 24" class="arrow-back h-4 w-4" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Change skills</button>
@@ -162,8 +162,8 @@
           <!-- Onboarding progress across the issues on screen -->
           <section id="progress-tracker" aria-labelledby="progress-label" class="glass mb-6 rounded-2xl p-5 sm:p-6">
             <div class="flex flex-wrap items-end justify-between gap-x-6 gap-y-1">
-              <p id="progress-label" class="font-display text-xl font-semibold tracking-tight text-white">Onboarding Progress: 0% Complete</p>
-              <p id="progress-detail" class="text-sm text-slate-400" aria-live="polite">Loading issues from GitHub...</p>
+              <p id="progress-label" class="font-display text-xl font-semibold tracking-tight text-ink">Onboarding Progress: 0% Complete</p>
+              <p id="progress-detail" class="text-sm text-ink-muted" aria-live="polite">Loading issues from GitHub...</p>
             </div>
             <div id="progress-bar" class="progress-track mt-4" role="progressbar" aria-labelledby="progress-label" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
               <div id="progress-fill" class="progress-fill"></div>
@@ -175,10 +175,10 @@
               <label for="search-input" class="field-label">Search these issues</label>
               <input id="search-input" type="search" autocomplete="off" placeholder="Title or description" class="field mt-2" />
             </div>
-            <p id="result-count" class="text-sm text-slate-400" aria-live="polite"></p>
+            <p id="result-count" class="text-sm text-ink-muted" aria-live="polite"></p>
           </div>
 
-          <div id="issue-error" class="mb-4 hidden rounded-xl border border-rose-500/40 bg-rose-500/10 p-4 text-sm text-rose-200" role="alert"></div>
+          <div id="issue-error" class="mb-4 hidden rounded-xl border border-rose-700/40 bg-rose-600/10 p-4 text-sm text-rose-900" role="alert"></div>
           <!-- No aria-live here: re-announcing every card on each change is noise. #result-count announces "N issues" instead. -->
           <div id="issue-groups" aria-busy="true"></div>
 
@@ -192,8 +192,8 @@
           <div class="mb-6 flex items-start gap-3">
             <span class="pillar-index" aria-hidden="true">3</span>
             <div>
-              <h2 id="l3-title" data-layer-title tabindex="-1" class="font-display text-2xl font-semibold tracking-tight text-white">The problem and how to approach it</h2>
-              <p class="max-w-2xl text-sm text-slate-400">What is wrong, where to look, a typical way to fix it, and whether the issue is still open to new contributors.</p>
+              <h2 id="l3-title" data-layer-title tabindex="-1" class="font-display text-2xl font-semibold tracking-tight text-ink">The problem and how to approach it</h2>
+              <p class="max-w-2xl text-sm text-ink-muted">What is wrong, where to look, a typical way to fix it, and whether the issue is still open to new contributors.</p>
             </div>
           </div>
 
@@ -206,7 +206,7 @@
             </div>
             <div class="lg:col-span-2">
               <div class="glass rounded-2xl p-5 sm:p-6">
-                <h3 class="font-display text-lg font-semibold tracking-tight text-white">Is it still open?</h3>
+                <h3 class="font-display text-lg font-semibold tracking-tight text-ink">Is it still open?</h3>
                 <div id="check-panel" class="mt-4" aria-live="polite">
                   <p class="empty-state">Choose Inspect issue on a card to check it against GitHub.</p>
                 </div>
@@ -225,8 +225,8 @@
           <div class="mb-6 flex items-start gap-3">
             <span class="pillar-index" aria-hidden="true">4</span>
             <div>
-              <h2 id="l4-title" data-layer-title tabindex="-1" class="font-display text-2xl font-semibold tracking-tight text-white">Resolve it, step by step</h2>
-              <p class="max-w-2xl text-sm text-slate-400">Work through one step at a time. Press Done when a step is finished and the next one lights up.</p>
+              <h2 id="l4-title" data-layer-title tabindex="-1" class="font-display text-2xl font-semibold tracking-tight text-ink">Resolve it, step by step</h2>
+              <p class="max-w-2xl text-sm text-ink-muted">Work through one step at a time. Press Done when a step is finished and the next one lights up.</p>
             </div>
           </div>
           <div id="start-panel" class="glass rounded-2xl p-5 sm:p-6" aria-live="polite">
@@ -249,13 +249,13 @@
             <svg viewBox="0 0 24 24" class="bookmark-icon is-filled h-5 w-5" aria-hidden="true"><path stroke-linejoin="round" d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9 6.8 19.6l1-5.8L3.5 9.7l5.9-.9L12 3.5z"/></svg>
           </span>
           <div>
-            <h2 id="bookmarks-title" class="font-display text-2xl font-semibold tracking-tight text-white">Bookmarks</h2>
-            <p id="bookmarks-subtitle" class="text-sm text-slate-400" aria-live="polite"></p>
+            <h2 id="bookmarks-title" class="font-display text-2xl font-semibold tracking-tight text-ink">Bookmarks</h2>
+            <p id="bookmarks-subtitle" class="text-sm text-ink-muted" aria-live="polite"></p>
           </div>
         </div>
         <button id="back-to-workspace" type="button" class="btn-ghost">Back to issues</button>
       </div>
-      <div id="bookmarks-error" class="hidden rounded-xl border border-rose-500/40 bg-rose-500/10 p-4 text-sm text-rose-200" role="alert"></div>
+      <div id="bookmarks-error" class="hidden rounded-xl border border-rose-700/40 bg-rose-600/10 p-4 text-sm text-rose-900" role="alert"></div>
       <ul id="bookmark-grid" class="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3"></ul>
     </section>
   </main>
@@ -267,8 +267,8 @@
 
       <!-- The people. Photos live in frontend/img/ (see img/README.md); until a photo exists the tile shows initials. -->
       <section id="team" class="footer-section scroll-mt-24" aria-labelledby="team-title">
-        <h2 id="team-title" class="font-display text-3xl font-semibold tracking-tight text-white sm:text-4xl">The people behind Trailbit</h2>
-        <p class="mt-2 max-w-2xl text-slate-400">Trailbit is built in the open. The maker is first, and every contributor gets a tile here.</p>
+        <h2 id="team-title" class="font-display text-3xl font-semibold tracking-tight text-ink sm:text-4xl">The people behind Trailbit</h2>
+        <p class="mt-2 max-w-2xl text-ink-muted">Trailbit is built in the open. The maker is first, and every contributor gets a tile here.</p>
         <ul class="people-grid" aria-label="The Trailbit team">
           <li class="person">
             <div class="photo-slot" data-photo="img/bhuvan-m.jpg">
@@ -290,8 +290,8 @@
 
         <div class="callout">
           <div>
-            <h3 class="font-display text-xl font-semibold text-white">Want your photo here?</h3>
-            <p class="mt-1 max-w-2xl text-slate-300">Trailbit is open source. Fix a bug, improve the docs or suggest an idea in the repository, and your photo can join the team here.</p>
+            <h3 class="font-display text-xl font-semibold text-ink">Want your photo here?</h3>
+            <p class="mt-1 max-w-2xl text-ink-body">Trailbit is open source. Fix a bug, improve the docs or suggest an idea in the repository, and your photo can join the team here.</p>
           </div>
           <a class="btn-ghost btn-lg" href="https://github.com/bhuvanm0981-ctrl/trailbit_maximum" target="_blank" rel="noopener noreferrer">See the code on GitHub<span class="sr-only"> (opens in a new tab)</span></a>
         </div>

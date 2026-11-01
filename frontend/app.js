@@ -260,10 +260,10 @@ function renderGlobalProgress() {
    Formatting and shared pieces
    ==================================================================== */
 const TONE_CLASS = {
-  good: "border-emerald-500/50 bg-emerald-500/20 text-emerald-400 shadow-[0_0_14px_rgba(16,185,129,0.25)]",
-  warn: "border-amber-500/50 bg-amber-500/15 text-amber-400",
-  bad: "border-rose-500/50 bg-rose-500/15 text-rose-400",
-  info: "border-amber-300/40 bg-amber-300/10 text-amber-100",
+  good: "border-emerald-700/50 bg-emerald-600/15 text-emerald-900",
+  warn: "border-amber-700/50 bg-amber-500/20 text-amber-900",
+  bad: "border-rose-700/50 bg-rose-600/15 text-rose-900",
+  info: "border-teal-700/40 bg-teal-600/10 text-teal-900",
 };
 
 /** Status pill. Healthy (good) pills carry a pulsing indicator dot. */
@@ -277,11 +277,11 @@ function badge(label, tone) {
 }
 
 const LANGUAGE_DOT = {
-  Python: "bg-sky-400",
-  JavaScript: "bg-yellow-300",
-  TypeScript: "bg-blue-500",
-  Go: "bg-cyan-300",
-  Rust: "bg-orange-400",
+  Python: "bg-sky-600",
+  JavaScript: "bg-yellow-500",
+  TypeScript: "bg-blue-600",
+  Go: "bg-cyan-600",
+  Rust: "bg-orange-500",
 };
 
 // Cards only know when GitHub last touched the issue (bots and labels count). The Check panel
@@ -299,17 +299,17 @@ function difficultyMeter(rating) {
     "span",
     { class: "inline-flex items-center gap-1", role: "img", "aria-label": `Difficulty ${rating} of 5, ${DIFFICULTY_LABEL[rating]}` },
     [1, 2, 3, 4, 5].map((n) =>
-      h("span", { class: `h-1.5 w-3.5 rounded-full ${n <= rating ? "bg-[#ffc940]" : "bg-slate-800"}`, "aria-hidden": "true" })
+      h("span", { class: `h-1.5 w-3.5 rounded-full ${n <= rating ? "bg-teal" : "bg-line/20"}`, "aria-hidden": "true" })
     ),
-    h("span", { class: "ml-1.5 text-xs text-slate-400", text: DIFFICULTY_LABEL[rating] })
+    h("span", { class: "ml-1.5 text-xs text-ink-muted", text: DIFFICULTY_LABEL[rating] })
   );
 }
 
 function languagePill(language) {
   return h(
     "span",
-    { class: "inline-flex items-center gap-2 text-sm font-medium text-slate-200" },
-    h("span", { class: `h-2.5 w-2.5 rounded-full ${LANGUAGE_DOT[language] || "bg-slate-400"}`, "aria-hidden": "true" }),
+    { class: "inline-flex items-center gap-2 text-sm font-medium text-ink" },
+    h("span", { class: `h-2.5 w-2.5 rounded-full ${LANGUAGE_DOT[language] || "bg-ink-muted"}`, "aria-hidden": "true" }),
     language
   );
 }
@@ -467,13 +467,13 @@ function bookmarkCard(bookmark) {
     h(
       "article",
       {
-        class: "issue-card enter group flex h-full flex-col gap-4 rounded-2xl border border-slate-800/80 p-5 transition duration-300 hover:-translate-y-1.5 hover:border-amber-300/50 hover:shadow-[0_14px_30px_rgba(0,0,0,0.35)]",
+        class: "issue-card enter group flex h-full flex-col gap-4 rounded-2xl border border-line/40 p-5 transition duration-300 hover:-translate-y-1.5 hover:border-teal/60 hover:shadow-[0_14px_30px_rgba(1,70,74,0.18)]",
         "data-bookmark-card": bookmark.id,
       },
       h("div", { class: "flex items-center justify-between gap-3" }, languagePill(bookmark.programming_language), star),
-      h("h3", { class: "font-display text-lg font-semibold leading-snug text-white", text: bookmark.title }),
+      h("h3", { class: "font-display text-lg font-semibold leading-snug text-ink", text: bookmark.title }),
       h("div", { class: "flex flex-wrap gap-2" }, monoLabel(`${bookmark.repo_owner}/${bookmark.repo_name}`)),
-      h("p", { class: "text-xs text-slate-400", text: `Saved ${formatDate(bookmark.bookmarked_at)}` }),
+      h("p", { class: "text-xs text-ink-muted", text: `Saved ${formatDate(bookmark.bookmarked_at)}` }),
       h(
         "div",
         { class: "mt-auto grid gap-3 sm:grid-cols-2" },
@@ -494,8 +494,8 @@ function renderBookmarksView() {
       h(
         "li",
         { class: "glass col-span-full rounded-2xl p-8 text-center" },
-        h("p", { class: "font-display text-lg font-semibold text-white", text: "No bookmarks yet" }),
-        h("p", { class: "mx-auto mt-1 max-w-md text-sm text-slate-400", text: "Choose the star on any issue to keep it here, even after you close this page." }),
+        h("p", { class: "font-display text-lg font-semibold text-ink", text: "No bookmarks yet" }),
+        h("p", { class: "mx-auto mt-1 max-w-md text-sm text-ink-muted", text: "Choose the star on any issue to keep it here, even after you close this page." }),
         h("button", { type: "button", class: "btn mt-4", text: "Browse issues", onClick: () => setView("workspace") })
       )
     );
@@ -550,7 +550,7 @@ function stepRow(issueId, step, scope) {
     h(
       "span",
       { class: "min-w-0 flex-1" },
-      h("span", { class: "mr-2 font-mono text-xs text-amber-200/80", "aria-hidden": "true", text: String(step.step_number).padStart(2, "0") }),
+      h("span", { class: "mr-2 font-mono text-xs text-ink-muted", "aria-hidden": "true", text: String(step.step_number).padStart(2, "0") }),
       h("span", { class: "sr-only", text: `Step ${step.step_number}: ` }),
       text
     )
@@ -591,7 +591,7 @@ function progressBlock(issue) {
     { class: "space-y-1.5" },
     h(
       "div",
-      { class: "flex items-center justify-between text-xs text-slate-400" },
+      { class: "flex items-center justify-between text-xs text-ink-muted" },
       h("span", { text: "Checklist progress" }),
       h("span", { "data-issue": issue.id, "data-count": "1", class: "tabular-nums", text: `${done} of ${total} steps` })
     ),
@@ -749,7 +749,7 @@ function skillChip(kind, name) {
     "label",
     { class: "skill-chip", for: id },
     input,
-    kind === "languages" ? h("span", { class: `h-2 w-2 rounded-full ${LANGUAGE_DOT[name] || "bg-slate-400"}`, "aria-hidden": "true" }) : null,
+    kind === "languages" ? h("span", { class: `h-2 w-2 rounded-full ${LANGUAGE_DOT[name] || "bg-ink-muted"}`, "aria-hidden": "true" }) : null,
     h("span", { text: kind === "topics" ? skillLabel(name) : name })
   );
 }
@@ -826,7 +826,7 @@ function matchLine(rel) {
     "div",
     { class: "flex flex-wrap items-center gap-x-3 gap-y-1.5" },
     h("span", { class: `match-pill match-${rel.tier}` }, h("span", { class: "match-bar", "aria-hidden": "true" }, h("i", { style: `width:${rel.percent}%` })), `${rel.percent}% match`),
-    names.length ? h("span", { class: "text-xs text-slate-300", text: `Matches: ${names.join(", ")}` }) : null
+    names.length ? h("span", { class: "text-xs text-ink-body", text: `Matches: ${names.join(", ")}` }) : null
   );
 }
 
@@ -843,7 +843,7 @@ function issueCard(issue, index, animate) {
     h(
       "article",
       {
-        class: `issue-card ${animate ? "enter" : ""} group flex h-full flex-col gap-4 rounded-2xl border border-slate-800/80 p-5 transition duration-300 hover:-translate-y-1.5 hover:border-amber-300/50 hover:shadow-[0_14px_30px_rgba(0,0,0,0.35)]`,
+        class: `issue-card ${animate ? "enter" : ""} group flex h-full flex-col gap-4 rounded-2xl border border-line/40 p-5 transition duration-300 hover:-translate-y-1.5 hover:border-teal/60 hover:shadow-[0_14px_30px_rgba(1,70,74,0.18)]`,
         style: animate ? `animation-delay:${Math.min(index, 11) * 45}ms` : null,
         "data-issue-id": issue.id,
         "aria-labelledby": titleId,
@@ -855,7 +855,7 @@ function issueCard(issue, index, animate) {
         languagePill(issue.programming_language),
         h("div", { class: "flex items-center gap-3" }, difficultyMeter(issue.difficulty_rating), bookmarkButton(issue))
       ),
-      h("h4", { id: titleId, class: "font-display text-lg font-semibold leading-snug text-white", text: issue.title }),
+      h("h4", { id: titleId, class: "font-display text-lg font-semibold leading-snug text-ink", text: issue.title }),
       rel && rel.percent > 0 ? matchLine(rel) : null,
       h(
         "div",
@@ -867,22 +867,22 @@ function issueCard(issue, index, animate) {
         ? h(
             "ul",
             { class: "flex flex-col gap-1.5", "aria-label": "Files this change touches" },
-            issue.affected_paths.slice(0, 2).map((path) => h("li", {}, monoLabel(shortPath(path), "inline-block text-slate-400", path)))
+            issue.affected_paths.slice(0, 2).map((path) => h("li", {}, monoLabel(shortPath(path), "inline-block text-ink-muted", path)))
           )
         : null,
       issue.topics.length
-        ? h("div", { class: "flex flex-wrap gap-1.5" }, issue.topics.map((topic) => h("span", { class: "rounded-md bg-slate-800/70 px-2 py-0.5 text-xs text-slate-300", text: topic })))
+        ? h("div", { class: "flex flex-wrap gap-1.5" }, issue.topics.map((topic) => h("span", { class: "rounded-md bg-line/15 px-2 py-0.5 text-xs text-ink-body", text: topic })))
         : null,
       h(
         "div",
         { class: "mt-auto space-y-4" },
         h(
           "div",
-          { class: "flex flex-wrap items-center gap-2 border-t border-slate-800/60 pt-4" },
+          { class: "flex flex-wrap items-center gap-2 border-t border-line/35 pt-4" },
           badge(closed ? "Closed" : metrics.is_locked ? "Locked" : "Open", closed || metrics.is_locked ? "bad" : "good"),
           badge(activity.label, activity.tone),
           issue.assignee_count > 0 ? badge(`Assigned (${issue.assignee_count})`, "warn") : null,
-          h("span", { class: "text-xs text-slate-400", text: `Last activity ${daysAgo(metrics.last_comment_date)}` })
+          h("span", { class: "text-xs text-ink-muted", text: `Last activity ${daysAgo(metrics.last_comment_date)}` })
         ),
         countDone(issue) > 0 ? progressBlock(issue) : null, // only once you have started this one
         h("button", { type: "button", class: "btn w-full", "aria-label": `Inspect issue: ${issue.title}`, onClick: () => selectIssue(issue) }, "Inspect issue", arrowIcon())
@@ -900,8 +900,8 @@ function renderIssues({ animate = true } = {}) {
     root.replaceChildren(
       h(
         "div",
-        { class: "glass rounded-2xl p-6 text-sm text-slate-400" },
-        h("p", { class: "font-semibold text-slate-200", text: "No open good first issues match this search." }),
+        { class: "glass rounded-2xl p-6 text-sm text-ink-muted" },
+        h("p", { class: "font-semibold text-ink", text: "No open good first issues match this search." }),
         h("p", { class: "mt-1", text: "Try fewer or different words, or clear the search box." })
       )
     );
@@ -918,7 +918,7 @@ function renderIssues({ animate = true } = {}) {
           "div",
           { class: "group-head" },
           h("span", { class: "tier-dots", "aria-hidden": "true" }, [1, 2, 3, 4].map((n) => h("i", { class: n <= group.dots ? "on" : "" }))),
-          h("div", {}, h("h3", { id: `group-${group.key}`, class: "font-display text-xl font-semibold tracking-tight text-white", text: group.title }), h("p", { class: "text-sm text-slate-400", text: `${plural(group.issues.length, "issue")}. ${group.hint}` }))
+          h("div", {}, h("h3", { id: `group-${group.key}`, class: "font-display text-xl font-semibold tracking-tight text-ink", text: group.title }), h("p", { class: "text-sm text-ink-muted", text: `${plural(group.issues.length, "issue")}. ${group.hint}` }))
         ),
         h("ul", { class: "grid grid-cols-1 gap-6 lg:grid-cols-2 xl:grid-cols-3" }, group.issues.map((issue) => issueCard(issue, index++, animate)))
       )
@@ -1026,12 +1026,12 @@ function renderCheck() {
         "div",
         { class: "space-y-2" },
         h("div", { class: "flex flex-wrap items-center gap-2" }, badge(headline, tone)),
-        h("p", { class: "text-sm text-slate-400", text: "We checked this issue against GitHub just now, so you know it is still worth your time." })
+        h("p", { class: "text-sm text-ink-muted", text: "We checked this issue against GitHub just now, so you know it is still worth your time." })
       ),
       h(
         "div",
         {},
-        h("div", { class: "mb-1.5 flex justify-between text-xs text-slate-400" }, h("span", { text: "Health score" }), h("span", { class: "tabular-nums", text: `${v.health_score} out of 100` })),
+        h("div", { class: "mb-1.5 flex justify-between text-xs text-ink-muted" }, h("span", { text: "Health score" }), h("span", { class: "tabular-nums", text: `${v.health_score} out of 100` })),
         h(
           "div",
           { class: `meter meter-${tone}`, role: "progressbar", "aria-label": "Health score", "aria-valuemin": "0", "aria-valuemax": "100", "aria-valuenow": String(v.health_score) },
@@ -1044,15 +1044,15 @@ function renderCheck() {
         v.badges.map((item) =>
           h(
             "li",
-            { class: "rounded-xl border border-slate-800/60 bg-slate-950/50 p-3" },
+            { class: "rounded-xl border border-line/35 bg-white/50 p-3" },
             badge(item.label, item.state),
-            h("p", { class: "mt-2 text-sm text-slate-400", text: item.detail })
+            h("p", { class: "mt-2 text-sm text-ink-muted", text: item.detail })
           )
         )
       ),
       h(
         "p",
-        { class: "text-xs text-slate-400", text: `Last comment on ${formatDate(issue.status_metrics.last_comment_date)}. ${plural(issue.comment_count, "comment")}, ${issue.assignee_count} assigned. Checked from GitHub at ${new Date(v.checked_at).toLocaleTimeString()}.` }
+        { class: "text-xs text-ink-muted", text: `Last comment on ${formatDate(issue.status_metrics.last_comment_date)}. ${plural(issue.comment_count, "comment")}, ${issue.assignee_count} assigned. Checked from GitHub at ${new Date(v.checked_at).toLocaleTimeString()}.` }
       )
     )
   );
@@ -1075,20 +1075,20 @@ function renderUnderstand(issue) {
         languagePill(issue.programming_language),
         h("div", { class: "flex items-center gap-3" }, difficultyMeter(issue.difficulty_rating), bookmarkButton(issue))
       ),
-      h("h3", { class: "font-display text-xl font-semibold leading-snug text-white", text: issue.title }),
+      h("h3", { class: "font-display text-xl font-semibold leading-snug text-ink", text: issue.title }),
       h("div", { class: "flex flex-wrap gap-2" }, monoLabel(`${issue.repo_owner}/${issue.repo_name}`)),
       rel && rel.percent > 0 ? matchLine(rel) : null,
       h(
         "div",
         { class: "space-y-1.5" },
         h("p", { class: "field-label", text: "The problem, as the issue describes it" }),
-        h("p", { class: "max-w-prose leading-relaxed text-slate-300", text: issue.context_summary })
+        h("p", { class: "max-w-prose leading-relaxed text-ink-body", text: issue.context_summary })
       ),
       issue.active_handles.length
         ? h(
             "div",
             { class: "space-y-2" },
-            h("p", { class: "text-sm font-semibold text-slate-200", text: "Active on the thread" }),
+            h("p", { class: "text-sm font-semibold text-ink", text: "Active on the thread" }),
             h("ul", { class: "flex flex-wrap gap-2" }, issue.active_handles.map((handle) => h("li", {}, monoLabel(`@${handle}`, "mono-handle"))))
           )
         : null,
@@ -1099,7 +1099,7 @@ function renderUnderstand(issue) {
         externalLink("context-link", issue.contributing_guidelines_url, "Contributing guidelines")
       ),
       issue.topics.length
-        ? h("div", { class: "flex flex-wrap gap-1.5" }, issue.topics.map((topic) => h("span", { class: "rounded-md bg-slate-800/70 px-2 py-0.5 text-xs text-slate-300", text: topic })))
+        ? h("div", { class: "flex flex-wrap gap-1.5" }, issue.topics.map((topic) => h("span", { class: "rounded-md bg-line/15 px-2 py-0.5 text-xs text-ink-body", text: topic })))
         : null
     )
   );
@@ -1192,18 +1192,18 @@ function renderApproach(issue) {
     h(
       "div",
       { class: "swap-in space-y-4" },
-      h("div", { class: "flex flex-wrap items-center gap-2" }, h("h3", { class: "font-display text-lg font-semibold text-white", text: "How to approach it" }), badge(approach.kind, "info")),
-      h("p", { class: "text-sm text-slate-400", text: `${approach.summary} This is a typical approach for this kind of issue, chosen from its labels and title. The maintainers' own advice in the thread always comes first.` }),
+      h("div", { class: "flex flex-wrap items-center gap-2" }, h("h3", { class: "font-display text-lg font-semibold text-ink", text: "How to approach it" }), badge(approach.kind, "info")),
+      h("p", { class: "text-sm text-ink-muted", text: `${approach.summary} This is a typical approach for this kind of issue, chosen from its labels and title. The maintainers' own advice in the thread always comes first.` }),
       h("ol", { class: "approach-list" }, approach.steps.map((step) => h("li", {}, step))),
       h(
         "div",
-        { class: "rounded-xl border border-slate-800/60 bg-slate-950/50 p-3" },
-        h("p", { class: "text-sm font-semibold text-slate-200", text: "Where to look" }),
+        { class: "rounded-xl border border-line/35 bg-white/50 p-3" },
+        h("p", { class: "text-sm font-semibold text-ink", text: "Where to look" }),
         paths.length
-          ? h("ul", { class: "mt-2 flex flex-wrap gap-2" }, paths.map((path) => h("li", {}, monoLabel(path, "inline-block text-slate-300"))))
-          : h("p", { class: "mt-1 text-sm text-slate-400", text: "The issue does not name any files. Search the repository for words from the title, or ask in the thread where the change belongs." })
+          ? h("ul", { class: "mt-2 flex flex-wrap gap-2" }, paths.map((path) => h("li", {}, monoLabel(path, "inline-block text-ink-body"))))
+          : h("p", { class: "mt-1 text-sm text-ink-muted", text: "The issue does not name any files. Search the repository for words from the title, or ask in the thread where the change belongs." })
       ),
-      h("p", { class: "text-sm text-slate-300", text: `Tip: ${approach.tip}` })
+      h("p", { class: "text-sm text-ink-body", text: `Tip: ${approach.tip}` })
     )
   );
 }
@@ -1228,18 +1228,18 @@ function renderPlan() {
       h(
         "div",
         { class: "flex flex-wrap items-end justify-between gap-4" },
-        h("div", { class: "min-w-0 space-y-2" }, h("h3", { class: "font-display text-xl font-semibold leading-snug text-white", text: plan.title }), monoLabel(plan.repo_full_name)),
+        h("div", { class: "min-w-0 space-y-2" }, h("h3", { class: "font-display text-xl font-semibold leading-snug text-ink", text: plan.title }), monoLabel(plan.repo_full_name)),
         h("div", { class: "w-full sm:w-64" }, progressBlock(issue))
       ),
       blocked
-        ? h("p", { class: "rounded-xl border border-rose-500/40 bg-rose-500/10 p-3 text-sm text-rose-200", role: "note", text: "This issue is blocked: it is locked, closed or in an archived repository. Read the plan, but check the thread before you start coding." })
+        ? h("p", { class: "rounded-xl border border-rose-700/40 bg-rose-600/10 p-3 text-sm text-rose-900", role: "note", text: "This issue is blocked: it is locked, closed or in an archived repository. Read the plan, but check the thread before you start coding." })
         : null,
       h("ol", { class: "plan-steps", "aria-label": "Steps to resolve this issue" }, plan.actionable_checklist.map((step) => stepRow(issue.id, step, "plan"))),
       h(
         "div",
         { id: "plan-complete", class: "plan-complete space-y-3", hidden: true },
-        h("h3", { id: "plan-complete-title", tabindex: "-1", class: "font-display text-xl font-semibold text-white", text: "All steps done. Nice work!" }),
-        h("p", { class: "text-sm text-slate-300", text: "Once your pull request is open, the maintainers will review it. They may ask for changes. That is normal, and part of the process." }),
+        h("h3", { id: "plan-complete-title", tabindex: "-1", class: "font-display text-xl font-semibold text-ink", text: "All steps done. Nice work!" }),
+        h("p", { class: "text-sm text-ink-body", text: "Once your pull request is open, the maintainers will review it. They may ask for changes. That is normal, and part of the process." }),
         h(
           "div",
           { class: "flex flex-wrap gap-3" },
@@ -1295,7 +1295,7 @@ function loadingBlock(lines = 3) {
 }
 
 const errorBlock = (prefix, message) =>
-  h("p", { class: "rounded-xl border border-rose-500/40 bg-rose-500/10 p-3 text-sm text-rose-200", role: "alert", text: `${prefix} ${message}` });
+  h("p", { class: "rounded-xl border border-rose-700/40 bg-rose-600/10 p-3 text-sm text-rose-900", role: "alert", text: `${prefix} ${message}` });
 
 function markSelected() {
   document.querySelectorAll("#issue-groups [data-issue-id]").forEach((card) => card.setAttribute("aria-current", String(card.dataset.issueId === state.selectedId)));
