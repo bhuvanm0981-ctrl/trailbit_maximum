@@ -297,6 +297,13 @@ Created with the goal of making open-source contribution more accessible to begi
 
 ---
 
+## License
+
+Trailbit is licensed under the **Apache License 2.0**.
+
+You are free to use, modify, and distribute this project under the terms of the license.
+
+See the [LICENSE](LICENSE) file for details.
 <p align="center">
   <b>🌱 Your first open-source contribution starts here.</b>
   <br>
