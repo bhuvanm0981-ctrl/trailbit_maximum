@@ -4,6 +4,10 @@ __pycache__/
 .env.*
 !.env.example
 *.sqlite3
+trailbit.db
+trailbit.db-journal
+trailbit.db-wal
+trailbit.db-shm
 .venv/
 venv/
 .pytest_cache/

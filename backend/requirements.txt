@@ -1,6 +1,2 @@
-fastapi
-uvicorn[standard]
-python-dotenv
-requests
-pydantic
-pydantic-settings
+# The single source of truth is requirements.txt in the repository root.
+-r ../requirements.txt

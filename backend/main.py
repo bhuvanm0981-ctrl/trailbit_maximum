@@ -1,92 +1,74 @@
+"""Trailbit API entrypoint.
+
+Local development, from the repository root:
+    uvicorn backend.main:app --host 127.0.0.1 --port 8000 --reload
+
+Production (Render sets PORT; HOST defaults to 0.0.0.0 there), either of:
+    uvicorn backend.main:app --host 0.0.0.0 --port $PORT
+    python -m backend.main        # reads HOST and PORT from the environment, PORT defaults to 10000
+"""
 
 import os
+from contextlib import asynccontextmanager
 
-import uvicorn
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
-from pydantic_settings import BaseSettings
 
-from .routes import discover, verify, contribution_plan
-
-
-# Application settings
-class Settings(BaseSettings):
-    tinyfish_api_key: str = ""
-
-    class Config:
-        env_file = ".env"
-        env_file_encoding = "utf-8"
+from .config import get_host, get_port
+from .database import close_db, init_db
+from .routes import bookmarks, contribution_plan, discover, verify
+from .services.tinyfish import UpstreamError, engine
 
 
-settings = Settings()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    await init_db()  # create the SQLite tables on first run
+    yield
+    await engine.aclose()
+    await close_db()
 
 
-# Create FastAPI application
-app = FastAPI(
-    title="Trailbit Backend",
-    version="0.1.0"
-)
+app = FastAPI(title="Trailbit", version="0.3.0", lifespan=lifespan)
 
-
-# CORS configuration
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 
-# TinyFish client dependency
-def get_tinyfish_client():
-    from .services.tinyfish import TinyFishClient
-    return TinyFishClient()
+@app.exception_handler(UpstreamError)
+async def upstream_error_handler(_: Request, exc: UpstreamError) -> JSONResponse:
+    """GitHub is down, slow or rate limiting us: tell the client plainly instead of a 500."""
+    return JSONResponse(status_code=exc.status_code, content={"detail": str(exc)}, headers=exc.headers)
 
 
-# Health check
-@app.get("/health")
-def health_check():
+app.include_router(discover.router, prefix="/api")
+app.include_router(verify.router, prefix="/api")
+app.include_router(contribution_plan.router, prefix="/api")
+app.include_router(bookmarks.router, prefix="/api")
+
+
+@app.get("/health", tags=["meta"])
+async def health_check() -> dict:
     return {"status": "ok"}
 
 
-# Register API routes
-app.include_router(
-    discover.router,
-    prefix="/api",
-    dependencies=[Depends(get_tinyfish_client)]
-)
-
-app.include_router(
-    verify.router,
-    prefix="/api",
-    dependencies=[Depends(get_tinyfish_client)]
-)
-
-app.include_router(
-    contribution_plan.router,
-    prefix="/api",
-    dependencies=[Depends(get_tinyfish_client)]
-)
+# Serve the frontend from the same origin (registered last so /api and /health win).
+_frontend_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "frontend"))
+if os.path.isdir(_frontend_dir):
+    app.mount("/", StaticFiles(directory=_frontend_dir, html=True), name="frontend")
 
 
-# Serve frontend files
-frontend_path = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "../frontend")
-)
+def run() -> None:
+    """Start uvicorn on HOST and PORT from the environment (PORT defaults to 10000)."""
+    import uvicorn
 
-app.mount(
-    "/",
-    StaticFiles(directory=frontend_path, html=True),
-    name="frontend"
-)
+    uvicorn.run(app, host=get_host(), port=get_port())
 
 
-# Run application directly
 if __name__ == "__main__":
-    uvicorn.run(
-        app,
-        host="127.0.0.1",
-        port=8000
-    )
+    run()

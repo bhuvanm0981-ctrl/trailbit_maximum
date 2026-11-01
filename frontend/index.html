@@ -1,291 +1,252 @@
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#0b1020">
-    <meta name="description" content="Discover beginner-friendly open-source issues and start contributing with Trailbit.">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Trailbit - Find your first open-source contribution</title>
+  <meta name="description" content="Find a live, beginner-friendly open-source issue on GitHub, check that it is healthy, understand what it needs, and follow a checklist to your first pull request." />
+  <meta name="theme-color" content="#030712" />
 
-    <title>Trailbit — Your Open Source Journey Starts Here</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Instrument Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+            display: ['"Bricolage Grotesque"', '"Instrument Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
+          },
+        },
+      },
+    };
+  </script>
+  <link rel="stylesheet" href="style.css" />
 </head>
+<body class="app-bg min-h-screen bg-[#030712] font-sans text-slate-300 antialiased">
+  <a href="#layer-stage" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-indigo-600 focus:px-3 focus:py-2 focus:text-white focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-indigo-200">Skip to content</a>
 
-<body>
+  <header class="sticky top-0 z-40 border-b border-slate-900 bg-slate-950/80 backdrop-blur-lg">
+    <div class="mx-auto flex max-w-[92rem] items-center justify-between gap-3 px-4 py-3 sm:px-6">
+      <a href="#top" id="home-link" class="flex items-center gap-2.5" aria-label="Trailbit home">
+        <span class="logo-mark inline-flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white" aria-hidden="true">
+          <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 19l5.5-10 4 6.5L16 10l5 9"/><circle cx="8.5" cy="5.5" r="1.6" fill="currentColor"/></svg>
+        </span>
+        <span class="font-display text-2xl font-extrabold tracking-tight bg-gradient-to-r from-indigo-300 via-violet-400 to-purple-500 bg-clip-text text-transparent">Trailbit</span>
+      </a>
 
-    <!-- Navigation -->
-    <nav class="navbar">
-        <a href="#" class="brand">
-            <span class="brand-icon">T</span>
-            <span>trailbit<span class="brand-dot">.</span></span>
-        </a>
-
-        <div class="nav-links">
-            <a href="#discover-section">Discover</a>
-            <a href="#how-it-works">How it works</a>
-            <a href="https://github.com/bhuvanm0981-ctrl/Traibit"
-               target="_blank"
-               rel="noopener noreferrer">
-                GitHub ↗
-            </a>
-        </div>
-
-        <button class="nav-cta" id="cta-start" type="button">
-            Start exploring <span>→</span>
+      <div class="view-switch" role="group" aria-label="View">
+        <button id="view-workspace" type="button" class="view-btn" aria-pressed="true">Issues</button>
+        <button id="view-bookmarks" type="button" class="view-btn" aria-pressed="false">
+          <svg viewBox="0 0 24 24" class="bookmark-icon h-4 w-4" aria-hidden="true"><path stroke-linejoin="round" d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9 6.8 19.6l1-5.8L3.5 9.7l5.9-.9L12 3.5z"/></svg>
+          <span>Bookmarks</span>
+          <span id="bookmark-count" class="count-pill" hidden>0</span>
         </button>
-    </nav>
+      </div>
+    </div>
+  </header>
 
-    <!-- Hero -->
-    <header class="hero">
-        <div class="hero-glow"></div>
+  <main id="top" class="mx-auto max-w-[92rem] px-4 py-8 sm:px-6">
+    <h1 class="sr-only">Trailbit: find your first open-source contribution</h1>
 
-        <div class="hero-content">
-            <div class="eyebrow">
-                <span class="status-dot"></span>
-                YOUR OPEN SOURCE JOURNEY STARTS HERE
+    <div id="workspace-view" class="space-y-8">
+      <!-- The four layers. Only one is visible at a time. -->
+      <div id="stepper-wrap">
+        <nav aria-label="Your progress through Trailbit">
+          <ol id="stepper" class="stepper">
+            <li><button type="button" class="step-btn" data-layer="1"><span class="step-dot" aria-hidden="true"><span class="step-num">1</span></span><span class="step-label"><span class="sr-only">Step 1 of 4: </span>Your skills</span></button></li>
+            <li><button type="button" class="step-btn" data-layer="2"><span class="step-dot" aria-hidden="true"><span class="step-num">2</span></span><span class="step-label"><span class="sr-only">Step 2 of 4: </span>Pick an issue</span></button></li>
+            <li><button type="button" class="step-btn" data-layer="3"><span class="step-dot" aria-hidden="true"><span class="step-num">3</span></span><span class="step-label"><span class="sr-only">Step 3 of 4: </span>The problem</span></button></li>
+            <li><button type="button" class="step-btn" data-layer="4"><span class="step-dot" aria-hidden="true"><span class="step-num">4</span></span><span class="step-label"><span class="sr-only">Step 4 of 4: </span>Resolve it</span></button></li>
+          </ol>
+        </nav>
+      </div>
+      <p id="layer-live" class="sr-only" role="status" aria-live="polite"></p>
+
+      <div id="layer-stage" class="space-y-8">
+
+        <!-- LAYER 1: what it is, how to use it, what you know -->
+        <section id="layer-1" class="layer" data-layer="1" aria-labelledby="l1-title">
+          <div class="max-w-3xl">
+            <h2 id="l1-title" data-layer-title tabindex="-1" class="font-display text-3xl font-extrabold tracking-tight text-white sm:text-5xl sm:leading-[1.05]">Find an issue worth your first pull request.</h2>
+            <p class="mt-4 max-w-2xl text-base leading-relaxed text-slate-400">Every issue here is open on GitHub right now and labelled good first issue. Tell us what you know, and we put the closest matches first.</p>
+            <p id="auth-note" class="mt-4 hidden max-w-2xl rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-xs text-amber-200"></p>
+          </div>
+
+          <div class="mt-8 grid gap-6 lg:grid-cols-2">
+            <article class="glass rounded-2xl p-5 sm:p-6" aria-labelledby="what-title">
+              <h3 id="what-title" class="font-display text-xl font-semibold tracking-tight text-white">What is Trailbit?</h3>
+              <p class="mt-3 leading-relaxed text-slate-300">Trailbit helps you make your first contribution to an open-source project. It finds real issues that maintainers have marked as good for newcomers, checks that they are still alive, explains the problem, and walks you through fixing it one step at a time.</p>
+              <details class="checklist-details mt-5">
+                <summary><span>New to open source? Three words to know</span><span class="chevron" aria-hidden="true"></span></summary>
+                <dl class="mt-3 space-y-3 px-1 text-sm leading-relaxed">
+                  <div><dt class="font-semibold text-slate-200">Issue</dt><dd class="text-slate-400">A bug report or a request on a project's GitHub page.</dd></div>
+                  <div><dt class="font-semibold text-slate-200">Fork</dt><dd class="text-slate-400">Your own copy of a project, where you can make changes safely.</dd></div>
+                  <div><dt class="font-semibold text-slate-200">Pull request</dt><dd class="text-slate-400">How you offer your change back to the maintainers for review.</dd></div>
+                </dl>
+              </details>
+            </article>
+
+            <article class="glass rounded-2xl p-5 sm:p-6" aria-labelledby="how-title">
+              <h3 id="how-title" class="font-display text-xl font-semibold tracking-tight text-white">How to use it</h3>
+              <ol class="how-list mt-4">
+                <li><span class="pillar-index" aria-hidden="true">1</span><p><strong>Tell us what you know.</strong> Tick your skills below, or skip if you are brand new.</p></li>
+                <li><span class="pillar-index" aria-hidden="true">2</span><p><strong>Pick an issue.</strong> The closest matches come first, then the list fades toward less related ones.</p></li>
+                <li><span class="pillar-index" aria-hidden="true">3</span><p><strong>Read the problem.</strong> Press Inspect issue to see what is wrong, where to look and how to approach it.</p></li>
+                <li><span class="pillar-index" aria-hidden="true">4</span><p><strong>Follow the steps.</strong> A guided checklist takes you from forking the project to opening your pull request.</p></li>
+              </ol>
+            </article>
+          </div>
+
+          <form id="skills-form" class="glass mt-6 rounded-2xl p-5 sm:p-6" aria-labelledby="skills-title" onsubmit="return false">
+            <h3 id="skills-title" class="font-display text-xl font-semibold tracking-tight text-white">What do you already know?</h3>
+            <p class="mt-1 text-sm text-slate-400">Tick the skills you are comfortable with. It is fine to pick none, or only a few.</p>
+            <div id="skills-error" class="mt-4 hidden rounded-xl border border-rose-500/40 bg-rose-500/10 p-4 text-sm text-rose-200" role="alert"></div>
+
+            <fieldset class="mt-5">
+              <legend class="field-label">Languages</legend>
+              <div id="skill-languages" class="mt-3 flex flex-wrap gap-2"></div>
+            </fieldset>
+
+            <fieldset class="mt-5">
+              <legend class="field-label">Kinds of work</legend>
+              <div id="skill-topics" class="mt-3 flex flex-wrap gap-2"></div>
+            </fieldset>
+
+            <div class="mt-6 flex flex-wrap items-center justify-between gap-4 border-t border-slate-800/60 pt-5">
+              <p id="skill-summary" class="text-sm text-slate-400" aria-live="polite"></p>
+              <div class="flex flex-wrap gap-3">
+                <button id="clear-skills" type="button" class="btn-ghost" hidden>Clear</button>
+                <button id="continue-skills" type="button" class="btn btn-lg"><span id="continue-label">Skip: show me the easiest issues</span><svg viewBox="0 0 24 24" class="arrow h-4 w-4" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+              </div>
             </div>
-
-            <h1>
-                Don't just explore code.<br>
-                <span>Become part of it.</span>
-            </h1>
-
-            <p class="hero-description">
-                Find real open-source issues that match your skills.
-                Understand what needs to be done. Make your first contribution
-                with confidence.
-            </p>
-
-            <div class="hero-actions">
-                <button class="primary-button" id="hero-start" type="button">
-                    Find my first issue <span>→</span>
-                </button>
-
-                <a href="#how-it-works" class="secondary-button">
-                    See how it works
-                </a>
-            </div>
-
-            <div class="hero-note">
-                <span>✦</span> Built for developers at every experience level
-            </div>
-        </div>
-
-        <div class="hero-visual" aria-hidden="true">
-            <div class="visual-card visual-card-main">
-                <div class="visual-card-top">
-                    <span class="visual-label">CONTRIBUTION OPPORTUNITY</span>
-                    <span class="visual-live">● LIVE</span>
-                </div>
-
-                <div class="visual-repo">
-                    <span class="repo-icon">⌘</span>
-                    <span>open-source / project</span>
-                </div>
-
-                <h3>Help improve documentation</h3>
-
-                <div class="visual-tags">
-                    <span>Good first issue</span>
-                    <span>Python</span>
-                </div>
-
-                <div class="visual-divider"></div>
-
-                <div class="visual-bottom">
-                    <span>Difficulty</span>
-                    <strong>Beginner friendly</strong>
-                </div>
-            </div>
-
-            <div class="floating-badge badge-one">
-                <span>✦</span> Find your path
-            </div>
-
-            <div class="floating-badge badge-two">
-                <span>✓</span> Start contributing
-            </div>
-        </div>
-    </header>
-
-    <!-- Main application -->
-    <main class="main" id="main-content" style="display:none;">
-
-        <section class="discover-section" id="discover-section">
-
-            <div class="section-heading">
-                <div>
-                    <div class="section-eyebrow">OPPORTUNITY FINDER</div>
-                    <h2>Find your next contribution.</h2>
-                    <p>Tell us what you know. We'll help you find where to start.</p>
-                </div>
-
-                <div class="powered-by">
-                    <span class="status-dot"></span>
-                    Powered by TinyFish
-                </div>
-            </div>
-
-            <!-- Search form -->
-            <form id="discover-form" class="search-panel">
-
-                <div class="form-heading">
-                    <div class="form-heading-icon">⌕</div>
-                    <div>
-                        <h3>Personalize your search</h3>
-                        <p>Choose your skills and interests.</p>
-                    </div>
-                </div>
-
-                <div class="form-grid">
-
-                    <label class="form-field">
-                        <span class="field-label">Programming language</span>
-                        <span class="field-hint">Select one or more</span>
-
-                        <select multiple name="language" size="4">
-                            <option>Python</option>
-                            <option>JavaScript</option>
-                            <option>TypeScript</option>
-                            <option>Java</option>
-                            <option>C++</option>
-                            <option>Go</option>
-                            <option>Rust</option>
-                        </select>
-                    </label>
-
-                    <label class="form-field">
-                        <span class="field-label">Area of interest</span>
-                        <span class="field-hint">Select one or more</span>
-
-                        <select multiple name="topic" size="4">
-                            <option>Web Development</option>
-                            <option>AI/ML</option>
-                            <option>Cybersecurity</option>
-                            <option>Backend</option>
-                            <option>Frontend</option>
-                            <option>DevTools</option>
-                        </select>
-                    </label>
-
-                    <label class="form-field">
-                        <span class="field-label">Your experience</span>
-                        <span class="field-hint">Choose your current level</span>
-
-                        <select name="experience">
-                            <option value="Beginner">Beginner</option>
-                            <option value="Intermediate">Intermediate</option>
-                            <option value="Advanced">Advanced</option>
-                        </select>
-                    </label>
-
-                    <label class="form-field">
-                        <span class="field-label">What do you want to work on?</span>
-                        <span class="field-hint">Optional keywords</span>
-
-                        <input
-                            type="text"
-                            name="keywords"
-                            placeholder="e.g. authentication, APIs, documentation"
-                        >
-                    </label>
-
-                </div>
-
-                <div class="search-footer">
-                    <p><span>✦</span> We'll look for relevant GitHub opportunities.</p>
-
-                    <button class="primary-button search-button" type="submit">
-                        Discover issues <span>→</span>
-                    </button>
-                </div>
-
-            </form>
-
-            <!-- Loading state -->
-            <div id="loading" class="loading-state hidden" aria-live="polite">
-                <div class="loader"></div>
-                <h3>Finding opportunities...</h3>
-                <p>Searching for issues that match your interests.</p>
-            </div>
-
-            <!-- Results -->
-            <section class="results-section" aria-live="polite">
-                <div id="results" class="results"></div>
-            </section>
-
+          </form>
         </section>
 
-    </main>
+        <!-- LAYER 2: issues, closest match first -->
+        <section id="layer-2" class="layer" data-layer="2" hidden aria-labelledby="l2-title">
+          <div class="mb-6 flex flex-wrap items-start justify-between gap-4">
+            <div class="flex items-start gap-3">
+              <span class="pillar-index" aria-hidden="true">2</span>
+              <div>
+                <h2 id="l2-title" data-layer-title tabindex="-1" class="font-display text-2xl font-semibold tracking-tight text-white">Pick an issue</h2>
+                <p id="l2-sub" class="max-w-2xl text-sm text-slate-400"></p>
+              </div>
+            </div>
+            <button id="change-skills" type="button" class="btn-ghost"><svg viewBox="0 0 24 24" class="arrow-back h-4 w-4" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Change skills</button>
+          </div>
 
-    <!-- How it works -->
-    <section class="how-section" id="how-it-works">
+          <!-- Onboarding progress across the issues on screen -->
+          <section id="progress-tracker" aria-labelledby="progress-label" class="glass mb-6 rounded-2xl p-5 sm:p-6">
+            <div class="flex flex-wrap items-end justify-between gap-x-6 gap-y-1">
+              <p id="progress-label" class="font-display text-xl font-semibold tracking-tight text-white">Onboarding Progress: 0% Complete</p>
+              <p id="progress-detail" class="text-sm text-slate-400" aria-live="polite">Loading issues from GitHub...</p>
+            </div>
+            <div id="progress-bar" class="progress-track mt-4" role="progressbar" aria-labelledby="progress-label" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+              <div id="progress-fill" class="progress-fill"></div>
+            </div>
+          </section>
 
-        <div class="section-eyebrow">SIMPLE BY DESIGN</div>
-        <h2>Your first contribution, made easier.</h2>
-        <p class="how-description">
-            From finding an issue to understanding how to solve it.
-        </p>
+          <div class="mb-6 flex flex-wrap items-end justify-between gap-4">
+            <div class="w-full sm:max-w-sm">
+              <label for="search-input" class="field-label">Search these issues</label>
+              <input id="search-input" type="search" autocomplete="off" placeholder="Title or description" class="field mt-2" />
+            </div>
+            <p id="result-count" class="text-sm text-slate-400" aria-live="polite"></p>
+          </div>
 
-        <div class="steps-grid">
+          <div id="issue-error" class="mb-4 hidden rounded-xl border border-rose-500/40 bg-rose-500/10 p-4 text-sm text-rose-200" role="alert"></div>
+          <!-- No aria-live here: re-announcing every card on each change is noise. #result-count announces "N issues" instead. -->
+          <div id="issue-groups" aria-busy="true"></div>
 
-            <article class="how-card">
-                <div class="step-number">01</div>
-                <div class="step-icon">⌕</div>
-                <h3>Discover</h3>
-                <p>Find open-source issues based on your skills, interests and experience.</p>
-            </article>
+          <div class="layer-nav">
+            <button id="back-to-skills" type="button" class="btn-ghost"><svg viewBox="0 0 24 24" class="arrow-back h-4 w-4" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Back to your skills</button>
+          </div>
+        </section>
 
-            <article class="how-card">
-                <div class="step-number">02</div>
-                <div class="step-icon">✓</div>
-                <h3>Verify</h3>
-                <p>Check issue status, assignments and linked pull requests before you begin.</p>
-            </article>
+        <!-- LAYER 3: the problem and how to approach it -->
+        <section id="layer-3" class="layer" data-layer="3" hidden aria-labelledby="l3-title">
+          <div class="mb-6 flex items-start gap-3">
+            <span class="pillar-index" aria-hidden="true">3</span>
+            <div>
+              <h2 id="l3-title" data-layer-title tabindex="-1" class="font-display text-2xl font-semibold tracking-tight text-white">The problem and how to approach it</h2>
+              <p class="max-w-2xl text-sm text-slate-400">What is wrong, where to look, a typical way to fix it, and whether the issue is still open to new contributors.</p>
+            </div>
+          </div>
 
-            <article class="how-card">
-                <div class="step-number">03</div>
-                <div class="step-icon">↗</div>
-                <h3>Contribute</h3>
-                <p>Get a step-by-step roadmap to understand the issue and start working.</p>
-            </article>
+          <div class="grid gap-8 lg:grid-cols-5">
+            <div class="space-y-6 lg:col-span-3">
+              <div id="understand-panel" class="glass rounded-2xl p-5 sm:p-6" aria-live="polite">
+                <p class="empty-state">Choose Inspect issue on a card to read its context.</p>
+              </div>
+              <div id="approach-panel" class="glass rounded-2xl p-5 sm:p-6" aria-live="polite"></div>
+            </div>
+            <div class="lg:col-span-2">
+              <div class="glass rounded-2xl p-5 sm:p-6">
+                <h3 class="font-display text-lg font-semibold tracking-tight text-white">Is it still open?</h3>
+                <div id="check-panel" class="mt-4" aria-live="polite">
+                  <p class="empty-state">Choose Inspect issue on a card to check it against GitHub.</p>
+                </div>
+              </div>
+            </div>
+          </div>
 
+          <div class="layer-nav">
+            <button id="back-to-issues" type="button" class="btn-ghost"><svg viewBox="0 0 24 24" class="arrow-back h-4 w-4" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Back to issues</button>
+            <button id="to-steps" type="button" class="btn btn-lg" aria-disabled="true"><span id="to-steps-label">Preparing your steps...</span><svg viewBox="0 0 24 24" class="arrow h-4 w-4" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+          </div>
+        </section>
+
+        <!-- LAYER 4: step by step -->
+        <section id="layer-4" class="layer" data-layer="4" hidden aria-labelledby="l4-title">
+          <div class="mb-6 flex items-start gap-3">
+            <span class="pillar-index" aria-hidden="true">4</span>
+            <div>
+              <h2 id="l4-title" data-layer-title tabindex="-1" class="font-display text-2xl font-semibold tracking-tight text-white">Resolve it, step by step</h2>
+              <p class="max-w-2xl text-sm text-slate-400">Work through one step at a time. Press Done when a step is finished and the next one lights up.</p>
+            </div>
+          </div>
+          <div id="start-panel" class="glass rounded-2xl p-5 sm:p-6" aria-live="polite">
+            <p class="empty-state">Choose Inspect issue on a card to get its full checklist.</p>
+          </div>
+          <div class="layer-nav">
+            <button id="back-to-problem" type="button" class="btn-ghost"><svg viewBox="0 0 24 24" class="arrow-back h-4 w-4" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Back to the problem</button>
+            <button id="pick-another" type="button" class="btn-ghost">Pick another issue</button>
+          </div>
+        </section>
+
+      </div>
+    </div>
+
+    <!-- Bookmarks -->
+    <section id="bookmarks-view" hidden aria-labelledby="bookmarks-title" class="space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <span class="pillar-index" aria-hidden="true">
+            <svg viewBox="0 0 24 24" class="bookmark-icon is-filled h-5 w-5" aria-hidden="true"><path stroke-linejoin="round" d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9 6.8 19.6l1-5.8L3.5 9.7l5.9-.9L12 3.5z"/></svg>
+          </span>
+          <div>
+            <h2 id="bookmarks-title" class="font-display text-2xl font-semibold tracking-tight text-white">Bookmarks</h2>
+            <p id="bookmarks-subtitle" class="text-sm text-slate-400" aria-live="polite"></p>
+          </div>
         </div>
-
+        <button id="back-to-workspace" type="button" class="btn-ghost">Back to issues</button>
+      </div>
+      <div id="bookmarks-error" class="hidden rounded-xl border border-rose-500/40 bg-rose-500/10 p-4 text-sm text-rose-200" role="alert"></div>
+      <ul id="bookmark-grid" class="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3"></ul>
     </section>
+  </main>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <a href="#" class="brand">
-            <span class="brand-icon">T</span>
-            <span>trailbit<span class="brand-dot">.</span></span>
-        </a>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-        <p>Your first open-source contribution starts here.</p>
+  <footer class="mt-10 border-t border-slate-900 py-6 text-center text-xs text-slate-400">
+    Trailbit MVP. Issues come live from the GitHub API; bookmarks are stored in a local SQLite file.
+  </footer>
 
-        <a href="https://github.com/bhuvanm0981-ctrl/Traibit"
-           target="_blank"
-           rel="noopener noreferrer">
-            Built for the open-source community ↗
-        </a>
-    </footer>
-
-    <script src="app.js"></script>
-
-    <!-- Hero button uses the existing discovery CTA -->
-    <script>
-        document.getElementById("hero-start").addEventListener("click", () => {
-            document.getElementById("cta-start").click();
-            document.getElementById("discover-section").scrollIntoView({
-                behavior: "smooth"
-            });
-        });
-    </script>
-
+  <script src="app.js"></script>
 </body>
 </html>
