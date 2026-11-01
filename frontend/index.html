@@ -5,19 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Trailbit - Find your first open-source contribution</title>
   <meta name="description" content="Find a live, beginner-friendly open-source issue on GitHub, check that it is healthy, understand what it needs, and follow a checklist to your first pull request." />
-  <meta name="theme-color" content="#030712" />
+  <meta name="theme-color" content="#0e1626" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=JetBrains+Mono:wght@400;500&display=swap" />
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       theme: {
         extend: {
+          // Navy + cream palette. Overriding slate/white here recolours every text-slate-* / bg-slate-* / text-white class at once.
+          colors: {
+            white: '#faf6ee',
+            slate: { 50: '#faf6ee', 100: '#f1ece2', 200: '#ece7dc', 300: '#d8d4ca', 400: '#b3bdd1', 500: '#8794b0',
+                     600: '#5f6e90', 700: '#3b486a', 800: '#26334f', 900: '#18233a', 950: '#0e1626' },
+          },
           fontFamily: {
-            sans: ['"Instrument Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+            sans: ['"Atkinson Hyperlegible"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
             display: ['"Bricolage Grotesque"', '"Instrument Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
             mono: ['"JetBrains Mono"', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
           },
@@ -27,17 +33,23 @@
   </script>
   <link rel="stylesheet" href="style.css" />
 </head>
-<body class="app-bg min-h-screen bg-[#030712] font-sans text-slate-300 antialiased">
-  <a href="#layer-stage" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-indigo-600 focus:px-3 focus:py-2 focus:text-white focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-indigo-200">Skip to content</a>
+<body class="app-bg min-h-screen bg-[#0e1626] font-sans text-slate-300 antialiased">
+  <a href="#layer-stage" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-[#ffc940] focus:px-3 focus:py-2 focus:text-[#0e1626] focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-white">Skip to content</a>
 
   <header class="sticky top-0 z-40 border-b border-slate-900 bg-slate-950/80 backdrop-blur-lg">
     <div class="mx-auto flex max-w-[92rem] items-center justify-between gap-3 px-4 py-3 sm:px-6">
       <a href="#top" id="home-link" class="flex items-center gap-2.5" aria-label="Trailbit home">
-        <span class="logo-mark inline-flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white" aria-hidden="true">
+        <span class="logo-mark inline-flex h-9 w-9 items-center justify-center rounded-xl bg-[#ffc940] text-[#0e1626]" aria-hidden="true">
           <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 19l5.5-10 4 6.5L16 10l5 9"/><circle cx="8.5" cy="5.5" r="1.6" fill="currentColor"/></svg>
         </span>
-        <span class="font-display text-2xl font-extrabold tracking-tight bg-gradient-to-r from-indigo-300 via-violet-400 to-purple-500 bg-clip-text text-transparent">Trailbit</span>
+        <span class="font-display text-2xl font-extrabold tracking-tight text-white">Trailbit</span>
       </a>
+
+      <nav aria-label="About Trailbit" class="hidden items-center gap-1 text-sm md:flex">
+        <a href="#about" class="nav-link">About</a>
+        <a href="#team" class="nav-link">Team</a>
+        <a href="#contact" class="nav-link">Contact</a>
+      </nav>
 
       <div class="view-switch" role="group" aria-label="View">
         <button id="view-workspace" type="button" class="view-btn" aria-pressed="true">Issues</button>
@@ -71,14 +83,20 @@
 
         <!-- LAYER 1: what it is, how to use it, what you know -->
         <section id="layer-1" class="layer" data-layer="1" aria-labelledby="l1-title">
-          <div class="max-w-3xl">
-            <h2 id="l1-title" data-layer-title tabindex="-1" class="font-display text-3xl font-extrabold tracking-tight text-white sm:text-5xl sm:leading-[1.05]">Find an issue worth your first pull request.</h2>
-            <p class="mt-4 max-w-2xl text-base leading-relaxed text-slate-400">Every issue here is open on GitHub right now and labelled good first issue. Tell us what you know, and we put the closest matches first.</p>
-            <p id="auth-note" class="mt-4 hidden max-w-2xl rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-xs text-amber-200"></p>
-          </div>
+          <div class="grid items-start gap-10 lg:grid-cols-5">
+            <div class="lg:col-span-3">
+              <p class="eyebrow">Open source, made approachable</p>
+              <h2 id="l1-title" data-layer-title tabindex="-1" class="mt-3 font-display text-4xl font-extrabold tracking-tight text-white sm:text-6xl sm:leading-[1.02]">Find an issue worth your <span class="text-accent">first pull request.</span></h2>
+              <p class="mt-5 max-w-2xl text-lg leading-relaxed text-slate-300">Every issue here is open on GitHub right now and labelled good first issue. Tell us what you know, and we put the closest matches first.</p>
+              <div class="mt-7 flex flex-wrap items-center gap-3">
+                <button id="hero-cta" type="button" class="btn btn-lg">Choose my skills<svg viewBox="0 0 24 24" class="arrow h-4 w-4" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg></button>
+                <button id="hero-how" type="button" class="btn-ghost btn-lg">How it works</button>
+              </div>
+              <p class="mt-5 flex max-w-xl items-start gap-2 text-sm text-slate-400"><svg viewBox="0 0 24 24" class="mt-0.5 h-4 w-4 flex-none text-[#ffc940]" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.5-3.2 7.8-8 9-4.8-1.2-8-4.5-8-9V6l8-3z"/><path d="M9 12l2 2 4-4"/></svg><span>Free to use. Nothing here is a demo: issues are fetched live from GitHub, so what you see is open today.</span></p>
+              <p id="auth-note" class="mt-4 hidden max-w-2xl rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-xs text-amber-200"></p>
+            </div>
 
-          <div class="mt-8 grid gap-6 lg:grid-cols-2">
-            <article class="glass rounded-2xl p-5 sm:p-6" aria-labelledby="what-title">
+            <article class="glass rounded-2xl p-5 sm:p-6 lg:col-span-2" aria-labelledby="what-title">
               <h3 id="what-title" class="font-display text-xl font-semibold tracking-tight text-white">What is Trailbit?</h3>
               <p class="mt-3 leading-relaxed text-slate-300">Trailbit helps you make your first contribution to an open-source project. It finds real issues that maintainers have marked as good for newcomers, checks that they are still alive, explains the problem, and walks you through fixing it one step at a time.</p>
               <details class="checklist-details mt-5">
@@ -90,20 +108,21 @@
                 </dl>
               </details>
             </article>
-
-            <article class="glass rounded-2xl p-5 sm:p-6" aria-labelledby="how-title">
-              <h3 id="how-title" class="font-display text-xl font-semibold tracking-tight text-white">How to use it</h3>
-              <ol class="how-list mt-4">
-                <li><span class="pillar-index" aria-hidden="true">1</span><p><strong>Tell us what you know.</strong> Tick your skills below, or skip if you are brand new.</p></li>
-                <li><span class="pillar-index" aria-hidden="true">2</span><p><strong>Pick an issue.</strong> The closest matches come first, then the list fades toward less related ones.</p></li>
-                <li><span class="pillar-index" aria-hidden="true">3</span><p><strong>Read the problem.</strong> Press Inspect issue to see what is wrong, where to look and how to approach it.</p></li>
-                <li><span class="pillar-index" aria-hidden="true">4</span><p><strong>Follow the steps.</strong> A guided checklist takes you from forking the project to opening your pull request.</p></li>
-              </ol>
-            </article>
           </div>
 
-          <form id="skills-form" class="glass mt-6 rounded-2xl p-5 sm:p-6" aria-labelledby="skills-title" onsubmit="return false">
-            <h3 id="skills-title" class="font-display text-xl font-semibold tracking-tight text-white">What do you already know?</h3>
+          <section id="how" class="mt-16 scroll-mt-24" aria-labelledby="how-title">
+            <h3 id="how-title" class="font-display text-3xl font-semibold tracking-tight text-white">How it works, in four layers</h3>
+            <p class="mt-2 max-w-2xl text-slate-400">You move through them one at a time. Nothing is hidden behind a login, and you can step back whenever you like.</p>
+            <ol class="chapter-list mt-6">
+              <li><span class="pillar-index" aria-hidden="true">1</span><h4>Tell us what you know</h4><p>Tick your skills below, or skip if you are brand new. We use them only to order the list.</p></li>
+              <li><span class="pillar-index" aria-hidden="true">2</span><h4>Pick an issue</h4><p>The closest matches come first, then the list fades toward less related ones.</p></li>
+              <li><span class="pillar-index" aria-hidden="true">3</span><h4>Read the problem</h4><p>Press Inspect issue to see what is wrong, where to look and a typical way to approach it.</p></li>
+              <li><span class="pillar-index" aria-hidden="true">4</span><h4>Follow the steps</h4><p>A guided checklist takes you from forking the project to opening your pull request.</p></li>
+            </ol>
+          </section>
+
+          <form id="skills-form" class="glass mt-14 scroll-mt-24 rounded-2xl p-5 sm:p-6" aria-labelledby="skills-title" onsubmit="return false">
+            <h3 id="skills-title" class="font-display text-2xl font-semibold tracking-tight text-white">What do you already know?</h3>
             <p class="mt-1 text-sm text-slate-400">Tick the skills you are comfortable with. It is fine to pick none, or only a few.</p>
             <div id="skills-error" class="mt-4 hidden rounded-xl border border-rose-500/40 bg-rose-500/10 p-4 text-sm text-rose-200" role="alert"></div>
 
@@ -243,8 +262,77 @@
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-  <footer class="mt-10 border-t border-slate-900 py-6 text-center text-xs text-slate-400">
-    Trailbit MVP. Issues come live from the GitHub API; bookmarks are stored in a local SQLite file.
+  <footer id="about" class="site-footer">
+    <div class="mx-auto max-w-[92rem] px-4 sm:px-6">
+
+      <!-- The people. Photos live in frontend/img/ (see img/README.md); until a photo exists the tile shows initials. -->
+      <section id="team" class="footer-section scroll-mt-24" aria-labelledby="team-title">
+        <h2 id="team-title" class="font-display text-3xl font-semibold tracking-tight text-white sm:text-4xl">The people behind Trailbit</h2>
+        <p class="mt-2 max-w-2xl text-slate-400">Trailbit is built in the open. The maker is first, and every contributor gets a tile here.</p>
+        <ul class="people-grid" aria-label="The Trailbit team">
+          <li class="person">
+            <div class="photo-slot" data-photo="img/bhuvan-m.jpg">
+              <img alt="Portrait of Bhuvan M" hidden />
+              <span class="photo-fallback" aria-hidden="true">BM</span>
+            </div>
+            <p class="person-name">Bhuvan M</p>
+            <p class="person-role">Developer and maker</p>
+          </li>
+          <li class="person">
+            <div class="photo-slot" data-photo="img/rajeeva-mj.jpg">
+              <img alt="Portrait of Rajeeva MJ" hidden />
+              <span class="photo-fallback" aria-hidden="true">RM</span>
+            </div>
+            <p class="person-name">Rajeeva MJ</p>
+            <p class="person-role">Contributor</p>
+          </li>
+        </ul>
+
+        <div class="callout">
+          <div>
+            <h3 class="font-display text-xl font-semibold text-white">Want your photo here?</h3>
+            <p class="mt-1 max-w-2xl text-slate-300">Trailbit is open source. Fix a bug, improve the docs or suggest an idea in the repository, and your photo can join the team here.</p>
+          </div>
+          <a class="btn-ghost btn-lg" href="https://github.com/bhuvanm0981-ctrl/trailbit_maximum" target="_blank" rel="noopener noreferrer">See the code on GitHub<span class="sr-only"> (opens in a new tab)</span></a>
+        </div>
+      </section>
+
+      <div class="footer-cols">
+        <section aria-labelledby="proj-title">
+          <h2 id="proj-title" class="footer-h">About the project</h2>
+          <p>Trailbit helps beginners find a real, open good first issue on GitHub, check that it is still alive, understand the problem, and follow a step-by-step checklist to a first pull request.</p>
+          <ul class="tag-list" aria-label="Built with">
+            <li>HTML, CSS and JavaScript</li><li>Tailwind CSS</li><li>FastAPI</li><li>SQLite</li><li>GitHub API</li>
+          </ul>
+        </section>
+
+        <section aria-labelledby="maker-title">
+          <h2 id="maker-title" class="footer-h">About the maker</h2>
+          <p>Bhuvan M builds Trailbit and looks after this repository. Bhuvan is also one of the four people behind <a class="text-link" href="https://rbksh.github.io/HaptiBraille/" target="_blank" rel="noopener noreferrer">HaptiBraille<span class="sr-only"> (opens in a new tab)</span></a>, an Android app that turns text into Braille you feel through your phone's vibration.</p>
+        </section>
+
+        <section id="contact" class="scroll-mt-24" aria-labelledby="contact-title">
+          <h2 id="contact-title" class="footer-h">Contact the developer</h2>
+          <dl class="contact-list">
+            <div>
+              <dt>Email</dt>
+              <dd>
+                <a id="dev-email" class="text-link" href="mailto:bhuvanm0981@gmail.com">bhuvanm0981@gmail.com</a>
+                <button id="copy-email" type="button" class="copy-btn" data-copy="bhuvanm0981@gmail.com" aria-label="Copy the email address">Copy</button>
+              </dd>
+            </div>
+            <div><dt>GitHub</dt><dd><a class="text-link" href="https://github.com/bhuvanm0981-ctrl" target="_blank" rel="noopener noreferrer">@bhuvanm0981-ctrl<span class="sr-only"> (opens in a new tab)</span></a></dd></div>
+            <div><dt>Project</dt><dd><a class="text-link" href="https://github.com/bhuvanm0981-ctrl/trailbit_maximum" target="_blank" rel="noopener noreferrer">bhuvanm0981-ctrl/trailbit_maximum<span class="sr-only"> (opens in a new tab)</span></a></dd></div>
+            <div><dt>Found a bug?</dt><dd><a class="text-link" href="https://github.com/bhuvanm0981-ctrl/trailbit_maximum/issues" target="_blank" rel="noopener noreferrer">Open an issue<span class="sr-only"> (opens in a new tab)</span></a></dd></div>
+          </dl>
+        </section>
+      </div>
+
+      <div class="footer-base">
+        <p>&copy; 2026 Trailbit. Built by Bhuvan M. Issues come live from the GitHub API; bookmarks are stored in a local SQLite file.</p>
+        <a class="text-link" href="#top" id="to-top">Back to top</a>
+      </div>
+    </div>
   </footer>
 
   <script src="app.js"></script>

@@ -263,7 +263,7 @@ const TONE_CLASS = {
   good: "border-emerald-500/50 bg-emerald-500/20 text-emerald-400 shadow-[0_0_14px_rgba(16,185,129,0.25)]",
   warn: "border-amber-500/50 bg-amber-500/15 text-amber-400",
   bad: "border-rose-500/50 bg-rose-500/15 text-rose-400",
-  info: "border-indigo-400/30 bg-indigo-500/10 text-indigo-200",
+  info: "border-amber-300/40 bg-amber-300/10 text-amber-100",
 };
 
 /** Status pill. Healthy (good) pills carry a pulsing indicator dot. */
@@ -299,7 +299,7 @@ function difficultyMeter(rating) {
     "span",
     { class: "inline-flex items-center gap-1", role: "img", "aria-label": `Difficulty ${rating} of 5, ${DIFFICULTY_LABEL[rating]}` },
     [1, 2, 3, 4, 5].map((n) =>
-      h("span", { class: `h-1.5 w-3.5 rounded-full ${n <= rating ? "bg-gradient-to-r from-indigo-500 to-purple-600" : "bg-slate-800"}`, "aria-hidden": "true" })
+      h("span", { class: `h-1.5 w-3.5 rounded-full ${n <= rating ? "bg-[#ffc940]" : "bg-slate-800"}`, "aria-hidden": "true" })
     ),
     h("span", { class: "ml-1.5 text-xs text-slate-400", text: DIFFICULTY_LABEL[rating] })
   );
@@ -467,7 +467,7 @@ function bookmarkCard(bookmark) {
     h(
       "article",
       {
-        class: "issue-card enter group flex h-full flex-col gap-4 rounded-2xl border border-slate-800/60 bg-slate-900/40 p-5 backdrop-blur-md transition duration-300 hover:-translate-y-1.5 hover:shadow-[0_0_25px_rgba(99,102,241,0.15)]",
+        class: "issue-card enter group flex h-full flex-col gap-4 rounded-2xl border border-slate-800/80 p-5 transition duration-300 hover:-translate-y-1.5 hover:border-amber-300/50 hover:shadow-[0_14px_30px_rgba(0,0,0,0.35)]",
         "data-bookmark-card": bookmark.id,
       },
       h("div", { class: "flex items-center justify-between gap-3" }, languagePill(bookmark.programming_language), star),
@@ -550,7 +550,7 @@ function stepRow(issueId, step, scope) {
     h(
       "span",
       { class: "min-w-0 flex-1" },
-      h("span", { class: "mr-2 font-mono text-xs text-indigo-300/80", "aria-hidden": "true", text: String(step.step_number).padStart(2, "0") }),
+      h("span", { class: "mr-2 font-mono text-xs text-amber-200/80", "aria-hidden": "true", text: String(step.step_number).padStart(2, "0") }),
       h("span", { class: "sr-only", text: `Step ${step.step_number}: ` }),
       text
     )
@@ -843,7 +843,7 @@ function issueCard(issue, index, animate) {
     h(
       "article",
       {
-        class: `issue-card ${animate ? "enter" : ""} group flex h-full flex-col gap-4 rounded-2xl border border-slate-800/60 bg-slate-900/40 p-5 backdrop-blur-md transition duration-300 hover:-translate-y-1.5 hover:shadow-[0_0_25px_rgba(99,102,241,0.15)]`,
+        class: `issue-card ${animate ? "enter" : ""} group flex h-full flex-col gap-4 rounded-2xl border border-slate-800/80 p-5 transition duration-300 hover:-translate-y-1.5 hover:border-amber-300/50 hover:shadow-[0_14px_30px_rgba(0,0,0,0.35)]`,
         style: animate ? `animation-delay:${Math.min(index, 11) * 45}ms` : null,
         "data-issue-id": issue.id,
         "aria-labelledby": titleId,
@@ -1393,8 +1393,41 @@ function onHistory() {
     setView("bookmarks");
     return;
   }
+  // In-page anchors (#team, #contact, #top, #how...) are not a move between layers: leave the user where they are.
+  if (!match && location.hash !== "") return;
   setView("workspace", { scroll: false });
   goLayer(match ? Number(match[1]) : 1, { push: false });
+}
+
+/* ====================================================================
+   Footer: team photos and contact
+   ==================================================================== */
+/** A tile shows its photo if the file exists, otherwise the initials already in the markup. */
+function initPeople() {
+  document.querySelectorAll(".photo-slot[data-photo]").forEach((slot) => {
+    const img = slot.querySelector("img");
+    const fallback = slot.querySelector(".photo-fallback");
+    const probe = new Image();
+    probe.onload = () => {
+      img.src = probe.src;
+      img.hidden = false;
+      if (fallback) fallback.hidden = true;
+      slot.classList.add("has-photo");
+    };
+    probe.src = slot.dataset.photo; // a missing file just leaves the initials in place
+  });
+}
+
+async function copyEmail(event) {
+  const button = event.currentTarget;
+  try {
+    await navigator.clipboard.writeText(button.dataset.copy);
+    showToast("Email address copied");
+    button.textContent = "Copied";
+    setTimeout(() => { button.textContent = "Copy"; }, 1800);
+  } catch {
+    showToast("Could not copy automatically. The address is shown next to the button.", "error");
+  }
 }
 
 async function init() {
@@ -1431,6 +1464,19 @@ async function init() {
     setView("workspace", { scroll: false });
     goLayer(1);
   });
+
+  // Layer 1 hero buttons scroll to the part they name
+  $("hero-cta").addEventListener("click", () => {
+    const form = $("skills-form");
+    form.scrollIntoView({ behavior: motion(), block: "start" });
+    const first = form.querySelector("input");
+    if (first) first.focus({ preventScroll: true });
+  });
+  $("hero-how").addEventListener("click", () => $("how").scrollIntoView({ behavior: motion(), block: "start" }));
+
+  // Footer
+  initPeople();
+  $("copy-email").addEventListener("click", copyEmail);
 
   // Bookmarks
   $("view-workspace").addEventListener("click", () => setView("workspace"));
