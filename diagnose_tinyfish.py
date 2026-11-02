@@ -1,39 +1,35 @@
-﻿from dotenv import load_dotenv
-import os
-from backend.services.tinyfish import TinyFishClient
+"""Check that TINYFISH_API_KEY works. Run from the repository root:  python diagnose_tinyfish.py"""
 
-load_dotenv()
+import asyncio
 
-if not os.getenv("TINYFISH_API_KEY"):
-    print("ERROR: API key was not loaded from .env")
-    raise SystemExit(1)
+from backend.services.tinyfish_api import TinyFishClient, TinyFishError
+from backend.text import contributing_highlights
 
-client = TinyFishClient()
+GUIDE = "https://github.com/psf/requests/blob/main/.github/CONTRIBUTING.md"
 
-queries = [
-    "site:github.com/issues Python good first issue",
-    "GitHub Python beginner friendly open source issues",
-]
 
-for query in queries:
-    print("\nQUERY:", query)
-
+async def main() -> int:
+    client = TinyFishClient()
+    if not client.configured:
+        print("ERROR: TINYFISH_API_KEY is not set (put it in .env or the environment).")
+        return 1
     try:
-        data = client.search(query)
+        results = await client.search("python requests library contributing guide", include_domains="github.com")
+        print(f"Search OK: {len(results)} results")
+        for item in results[:3]:
+            print("  ", item.get("title"), "->", item.get("url"))
 
-        print("Response type:", type(data).__name__)
-        print("Response keys:", list(data.keys()) if isinstance(data, dict) else "Not a dictionary")
+        text = await client.fetch_text(GUIDE, include_selectors=["article.markdown-body"])
+        print(f"Fetch OK: {len(text)} characters from {GUIDE}")
+        for rule in contributing_highlights(text):
+            print("   -", rule)
+    except TinyFishError as error:
+        print("ERROR:", error)
+        return 1
+    finally:
+        await client.aclose()
+    return 0
 
-        results = data.get("results", []) if isinstance(data, dict) else []
 
-        print("Result count:", len(results))
-
-        for item in results[:5]:
-            print({
-                "title": item.get("title"),
-                "url": item.get("url"),
-                "snippet": (item.get("snippet") or "")[:150]
-            })
-
-    except Exception as error:
-        print("ERROR:", type(error).__name__, str(error))
+if __name__ == "__main__":
+    raise SystemExit(asyncio.run(main()))

@@ -16,3 +16,8 @@ venv/
 *.log
 .DS_Store
 Thumbs.db
+
+node_modules/
+test-results/
+playwright-report/
+*.pid

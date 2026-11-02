@@ -1,0 +1,18 @@
+{
+  "name": "trailbit",
+  "private": true,
+  "description": "Frontend tooling for Trailbit: Tailwind build, ESLint and the browser tests. The app itself needs no Node at runtime.",
+  "scripts": {
+    "build:css": "tailwindcss -c tailwind.config.cjs -i tools/tailwind.input.css -o frontend/tailwind.css --minify",
+    "lint": "eslint frontend/js tests/e2e *.cjs",
+    "test:e2e": "playwright test"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.0",
+    "@playwright/test": "^1.56.1",
+    "axe-core": "^4.10.2",
+    "eslint": "^9.39.0",
+    "globals": "^16.5.0",
+    "tailwindcss": "3.4.17"
+  }
+}

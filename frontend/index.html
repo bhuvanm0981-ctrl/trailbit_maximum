@@ -6,32 +6,13 @@
   <title>Trailbit - Find your first open-source contribution</title>
   <meta name="description" content="Find a live, beginner-friendly open-source issue on GitHub, check that it is healthy, understand what it needs, and follow a checklist to your first pull request." />
   <meta name="theme-color" content="#dbe8d8" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=JetBrains+Mono:wght@400;500&display=swap" />
-
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          // Semantic colours read CSS variables from style.css, so a different palette (or the dark footer) re-points them.
-          colors: {
-            ink: { DEFAULT: 'var(--ink)', body: 'var(--body)', muted: 'var(--muted)' },
-            line: 'rgb(var(--line-rgb) / <alpha-value>)',
-            teal: { DEFAULT: 'rgb(var(--accent-rgb) / <alpha-value>)', deep: 'var(--accent-deep)' },
-          },
-          fontFamily: {
-            sans: ['"Atkinson Hyperlegible"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-            display: ['"Bricolage Grotesque"', '"Instrument Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-            mono: ['"JetBrains Mono"', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
-          },
-        },
-      },
-    };
-  </script>
+  <!-- Fonts and styles are all served from this site, so the page makes no request to any other origin.
+       tailwind.css is built from the classes used in this file and in js/ (npm run build:css); it loads last so utilities win, as they did under the CDN. -->
+  <link rel="stylesheet" href="fonts/fonts.css" />
   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="tailwind.css" />
 </head>
 <body class="app-bg min-h-screen bg-[#dbe8d8] font-sans text-ink-body antialiased">
   <a href="#layer-stage" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-teal focus:px-3 focus:py-2 focus:text-white focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-[#0b2426]">Skip to content</a>
@@ -121,7 +102,7 @@
             </ol>
           </section>
 
-          <form id="skills-form" class="glass mt-14 scroll-mt-24 rounded-2xl p-5 sm:p-6" aria-labelledby="skills-title" onsubmit="return false">
+          <form id="skills-form" class="glass mt-14 scroll-mt-24 rounded-2xl p-5 sm:p-6" aria-labelledby="skills-title">
             <h3 id="skills-title" class="font-display text-2xl font-semibold tracking-tight text-ink">What do you already know?</h3>
             <p class="mt-1 text-sm text-ink-muted">Tick the skills you are comfortable with. It is fine to pick none, or only a few.</p>
             <div id="skills-error" class="mt-4 hidden rounded-xl border border-rose-700/40 bg-rose-600/10 p-4 text-sm text-rose-900" role="alert"></div>
@@ -175,12 +156,22 @@
               <label for="search-input" class="field-label">Search these issues</label>
               <input id="search-input" type="search" autocomplete="off" placeholder="Title or description" class="field mt-2" />
             </div>
+            <div class="w-full sm:w-56">
+              <label for="sort-select" class="field-label">Order by</label>
+              <select id="sort-select" class="field mt-2">
+                <option value="updated">Recently updated</option>
+                <option value="newest">Newest</option>
+                <option value="discussed">Most discussed</option>
+                <option value="quiet">Least discussed</option>
+              </select>
+            </div>
             <p id="result-count" class="text-sm text-ink-muted" aria-live="polite"></p>
           </div>
 
           <div id="issue-error" class="mb-4 hidden rounded-xl border border-rose-700/40 bg-rose-600/10 p-4 text-sm text-rose-900" role="alert"></div>
           <!-- No aria-live here: re-announcing every card on each change is noise. #result-count announces "N issues" instead. -->
           <div id="issue-groups" aria-busy="true"></div>
+          <div class="mt-8 text-center"><button id="load-more" type="button" class="btn-ghost" hidden>Load more issues</button></div>
 
           <div class="layer-nav">
             <button id="back-to-skills" type="button" class="btn-ghost"><svg viewBox="0 0 24 24" class="arrow-back h-4 w-4" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Back to your skills</button>
@@ -272,7 +263,7 @@
         <ul class="people-grid" aria-label="The Trailbit team">
           <li class="person">
             <div class="photo-slot" data-photo="img/bhuvan-m.jpg">
-              <img alt="Portrait of Bhuvan M" hidden />
+              <img alt="Portrait of Bhuvan M" width="400" height="400" loading="lazy" decoding="async" hidden />
               <span class="photo-fallback" aria-hidden="true">BM</span>
             </div>
             <p class="person-name">Bhuvan M</p>
@@ -280,7 +271,7 @@
           </li>
           <li class="person">
             <div class="photo-slot" data-photo="img/rajeeva-mj.jpg">
-              <img alt="Portrait of Rajeeva MJ" hidden />
+              <img alt="Portrait of Rajeeva MJ" width="400" height="400" loading="lazy" decoding="async" hidden />
               <span class="photo-fallback" aria-hidden="true">RM</span>
             </div>
             <p class="person-name">Rajeeva MJ</p>
@@ -335,6 +326,6 @@
     </div>
   </footer>
 
-  <script src="app.js"></script>
+  <script type="module" src="js/main.js"></script>
 </body>
 </html>

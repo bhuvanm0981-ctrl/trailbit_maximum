@@ -25,11 +25,18 @@ services:
       # every visitor; with a token that is 30 a minute and 5,000 an hour. Render asks for the value; it is not stored here.
       - key: GITHUB_TOKEN
         sync: false
+      # Optional. Lets plans quote each repository's CONTRIBUTING guide (TinyFish Fetch, free up to 1,000 URLs a day).
+      # Leave it blank and everything else works. Render asks for the value; it is not stored here.
+      - key: TINYFISH_API_KEY
+        sync: false
       # Keep bookmarks (1 of 2): uncomment these two lines together with the disk block below.
       # - key: DATA_DIR
       #   value: /var/data
-      # Python: left to Render's default. The pinned requirements are tested on 3.12 and 3.14 (3.11+ is required).
-      # To pin one, add:  - key: PYTHON_VERSION   value: "3.12.x"   (Render needs a full x.y.z it supports)
+      # Optional. Report unhandled errors to Sentry. Also add sentry-sdk to requirements.txt (it is not installed by default).
+      # - key: SENTRY_DSN
+      #   sync: false
+      # Python: pinned to 3.12 by the .python-version file in the repository root, which Render reads. No PYTHON_VERSION variable is needed.
+      # On Render the service hides /docs, trusts Render's proxy for visitor IPs, and rate limits per visitor (see backend/config.py).
 
     # Keep bookmarks (2 of 2): change `plan: free` above to `plan: starter` and uncomment this block.
     # The app then stores trailbit.db on the disk, and bookmarks survive deploys. DATA_DIR above must match mountPath.

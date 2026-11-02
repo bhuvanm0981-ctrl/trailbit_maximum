@@ -1,0 +1,16 @@
+[tool.ruff]
+line-length = 170
+target-version = "py311"
+extend-exclude = [".venv", "node_modules"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+ignore = ["B008", "UP007", "UP006", "UP035", "UP045"]  # FastAPI's Depends()/Query() defaults; typing.List/Optional are used on purpose
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["E501"]  # parameter tables read best on one wide line
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+filterwarnings = ["error::pytest.PytestUnraisableExceptionWarning"]

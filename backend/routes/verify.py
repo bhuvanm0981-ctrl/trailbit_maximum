@@ -4,8 +4,10 @@ from fastapi import APIRouter, Depends, HTTPException
 
 from ..models.request import ResearchRequest
 from ..models.response import HealthBadge, VerifyResponse
-from ..services.tinyfish import IssueNotFoundError, TinyFishEngine, get_engine
-from ..utils import evaluate_health, utc_now_iso
+from ..scoring import evaluate_health
+from ..services.engine import TinyFishEngine, get_engine
+from ..services.github import IssueNotFoundError
+from ..utils import utc_now_iso
 
 router = APIRouter(tags=["verify"])
 
@@ -22,7 +24,11 @@ async def verify(
         raise HTTPException(status_code=422, detail=str(exc)) from exc
 
     health_state, score, badges = evaluate_health(
-        card.status_metrics, assignee_count=card.assignee_count, state=card.state
+        card.status_metrics,
+        assignee_count=card.assignee_count,
+        state=card.state,
+        linked_prs=len(card.linked_prs),
+        claimed_by=card.claimed_by,
     )
     return VerifyResponse(
         github_url=body.github_url,

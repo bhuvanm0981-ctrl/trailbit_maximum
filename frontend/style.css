@@ -960,3 +960,14 @@ html { color-scheme: light; }
   .person:hover .photo-slot { transform: none !important; }
   .chapter-list li:hover { padding-left: 0.25rem; }
 }
+
+/* Very small phones (320-380px): the header has to fit the logo and the Issues/Bookmarks switch side by side. */
+@media (max-width: 380px) {
+  .view-switch { gap: 0.1rem; padding: 0.2rem; }
+  .view-btn { padding: 0.4rem 0.65rem; font-size: 0.8rem; gap: 0.3rem; }
+  /* "Bookmarks" stays the button's accessible name; only the visible word goes, leaving the star and the count. */
+  #view-bookmarks > span:not(.count-pill) {
+    position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+  }
+  #home-link span:last-child { font-size: 1.3rem; }
+}
