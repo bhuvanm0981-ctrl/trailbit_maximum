@@ -194,3 +194,23 @@ for (const [width, height] of [[320, 568], [375, 667], [768, 1024], [1024, 768],
     expect(seen.problems).toEqual([]);
   });
 }
+
+test("the slide between steps still plays, and never makes the page scroll sideways while it runs", async ({ page }) => {
+  await page.setViewportSize({ width: 1024, height: 768 }); // normal motion: this is what visitors get
+  await openIssues(page);
+  await page.evaluate(() => {
+    window.__max = 0;
+    window.__slid = false;
+    window.__timer = setInterval(() => {
+      window.__max = Math.max(window.__max, document.documentElement.scrollWidth - document.documentElement.clientWidth);
+      if (document.getAnimations().some((a) => a.animationName === "layer-in-fwd")) window.__slid = true;
+    }, 8);
+  });
+  await page.locator(`${CARD} button:has-text("Inspect issue")`).click();
+  await expect(page.locator("#layer-3")).toBeVisible();
+  await page.waitForTimeout(800); // longer than the 0.45s slide
+  const { max, slid } = await page.evaluate(() => { clearInterval(window.__timer); return { max: window.__max, slid: window.__slid }; });
+  expect(slid, "the slide-in animation ran").toBe(true);
+  expect(max, "sideways overflow mid-slide").toBeLessThanOrEqual(1);
+  await expect(page.locator("#layer-3")).not.toHaveClass(/layer-forward/); // and the clip is released once it ends
+});

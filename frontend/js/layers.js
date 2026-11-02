@@ -64,6 +64,11 @@ export function goLayer(target, { push = true, focus = true } = {}) {
     if (active) {
       void section.offsetWidth; // restart the entrance animation
       section.classList.add(`layer-${direction}`);
+      // While it slides in, the page may not scroll sideways (see #workspace-view:has(...) in style.css).
+      // The class goes as soon as the slide ends, with a timer as a backstop if the animation never fires.
+      const settle = () => section.classList.remove("layer-forward", "layer-back");
+      section.addEventListener("animationend", settle, { once: true });
+      setTimeout(settle, 700);
     }
   });
   paintStepper();

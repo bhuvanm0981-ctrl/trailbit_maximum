@@ -658,6 +658,9 @@ html { color-scheme: light; }
 /* backwards, not both: a frozen final transform would trap position:sticky and fixed children. */
 .layer-forward { animation: layer-in-fwd 0.45s var(--ease) backwards; }
 .layer-back { animation: layer-in-back 0.45s var(--ease) backwards; }
+/* The slide-in starts 32px to the right, which would make the page scroll sideways for a moment. Clip it only while it runs,
+   so a real overflow at rest still shows up (and is caught by the browser tests). `clip`, unlike `hidden`, keeps sticky elements working. */
+#workspace-view:has(.layer-forward, .layer-back) { overflow-x: clip; }
 @keyframes layer-in-fwd { from { opacity: 0; transform: translateX(32px); } to { opacity: 1; transform: none; } }
 @keyframes layer-in-back { from { opacity: 0; transform: translateX(-32px); } to { opacity: 1; transform: none; } }
 

@@ -11,7 +11,7 @@ module.exports = defineConfig({
   expect: { timeout: 8_000 },
   fullyParallel: false,
   workers: 1, // the test server holds state (a database, switches), so tests run one at a time
-  reporter: [["list"]],
+  reporter: process.env.CI ? [["github"], ["list"]] : [["list"]], // on GitHub, failures appear as annotations that name the test
   use: {
     baseURL: `http://127.0.0.1:${PORT}`,
     channel: process.env.PW_CHANNEL || undefined,
